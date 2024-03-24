@@ -13,5 +13,6 @@ UCLASS()
 class GROUPPROJ27_API AGroupProj27GameModeBase : public AGameModeBase
 {
 	GENERATED_BODY()
-	
+
+public:
 };
