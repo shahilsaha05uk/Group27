@@ -19,6 +19,4 @@ public:
 
 	UFUNCTION(BlueprintCallable, BlueprintPure)
 	static FBounds GetBounds(AActor* actor);
-
-	
 };

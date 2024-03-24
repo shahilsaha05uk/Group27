@@ -8,7 +8,6 @@ FBounds UHelperMethods::GetBounds(AActor* actor)
 	if(!actor) return FBounds();
 	FVector origin, extent;
 	actor->GetActorBounds(false, origin, extent, false);
-
 	FBounds bounds;
 	bounds.Origin = origin;
 	bounds.Extent = extent;
@@ -20,3 +19,4 @@ FBounds UHelperMethods::GetBounds(AActor* actor)
 	bounds.RightOnY = origin + FVector(0,extent.Y, 0);
 	return bounds;
 }
+
