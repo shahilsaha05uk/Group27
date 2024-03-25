@@ -19,4 +19,6 @@ public:
 
 	UFUNCTION(BlueprintCallable, BlueprintPure)
 	static FBounds GetBounds(AActor* actor);
+	UFUNCTION(BlueprintCallable, BlueprintPure)
+	static FPlayerBoxTracePositions GetPlayerBoxTracePositions(FVector StartPos);
 };

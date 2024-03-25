@@ -20,3 +20,15 @@ FBounds UHelperMethods::GetBounds(AActor* actor)
 	return bounds;
 }
 
+FPlayerBoxTracePositions UHelperMethods::GetPlayerBoxTracePositions(FVector StartPos)
+{
+	FPlayerBoxTracePositions pos;
+	pos.Up_StartPos = FVector(StartPos.X, StartPos.Y, StartPos.Z * 2.0f);
+	pos.Up_EndPos = pos.Up_StartPos + FVector::DownVector;
+
+	pos.Down_StartPos = FVector(StartPos.X, StartPos.Y, StartPos.Z / 2.0f);
+	pos.Down_EndPos = pos.Down_StartPos + FVector::DownVector;
+
+	return pos;
+}
+
