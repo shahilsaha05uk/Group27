@@ -32,6 +32,26 @@ public:
 	FVector RightOnY;
 };
 
+USTRUCT(BlueprintType)
+struct FPlayerBoxTracePositions
+{
+	GENERATED_BODY()
+
+public:
+	
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+	FVector Up_StartPos;
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+	FVector Up_EndPos;
+
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+	FVector Down_StartPos;
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+	FVector Down_EndPos;
+	
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+	FVector Full_EndPos;
+};
 
 
 

@@ -8,7 +8,6 @@ FBounds UHelperMethods::GetBounds(AActor* actor)
 	if(!actor) return FBounds();
 	FVector origin, extent;
 	actor->GetActorBounds(false, origin, extent, false);
-
 	FBounds bounds;
 	bounds.Origin = origin;
 	bounds.Extent = extent;
@@ -20,3 +19,16 @@ FBounds UHelperMethods::GetBounds(AActor* actor)
 	bounds.RightOnY = origin + FVector(0,extent.Y, 0);
 	return bounds;
 }
+
+FPlayerBoxTracePositions UHelperMethods::GetPlayerBoxTracePositions(FVector StartPos)
+{
+	FPlayerBoxTracePositions pos;
+	pos.Up_StartPos = FVector(StartPos.X, StartPos.Y, StartPos.Z * 2.0f);
+	pos.Up_EndPos = pos.Up_StartPos + FVector::DownVector;
+
+	pos.Down_StartPos = FVector(StartPos.X, StartPos.Y, StartPos.Z / 2.0f);
+	pos.Down_EndPos = pos.Down_StartPos + FVector::DownVector;
+
+	return pos;
+}
+
