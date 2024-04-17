@@ -2,15 +2,17 @@
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
 #include "InputTriggers.h"
-#include "PlayerInputInterface.h"
 #include "DataAssets/DA_Inputs.h"
+#include "Interfaces/PlayerInputInterface.h"
 #include "Kismet/KismetSystemLibrary.h"
 
 void AInputController::BeginPlay()
 {
 	Super::BeginPlay();
+	/*
 	PlayerCameraManager->ViewPitchMin = mMinCamPitch;
 	PlayerCameraManager->ViewPitchMax = mMaxCamPitch;
+*/
 }
 
 void AInputController::SetupInputComponent()
@@ -125,4 +127,3 @@ void AInputController::Slide_Implementation(const FInputActionValue& Value)
 		IPlayerInputInterface::Execute_Slide(pawn, Value);
 	}
 }
-
