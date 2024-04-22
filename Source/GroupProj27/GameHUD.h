@@ -15,12 +15,12 @@ class GROUPPROJ27_API AGameHUD : public AHUD
 
 private:
 	UPROPERTY()
-	TMap<EWidgetType, UBaseWidget*> mWidgetInstances;
+	TMap<TEnumAsByte<EWidgetType>, UBaseWidget*> mWidgetInstances;
 public:
-	UPROPERTY(EditDefaultsOnly, BlueprintCallable)
-	TMap<EWidgetType, TSubclassOf<UBaseWidget>> mWidgetClassMap;
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
+	TMap<TEnumAsByte<EWidgetType>, TSubclassOf<UBaseWidget>> mWidgetClassMap;
 
 	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
-	void CreateWidget()
+	class UBaseWidget* InitiateWidget(EWidgetType type);
 	
 };
