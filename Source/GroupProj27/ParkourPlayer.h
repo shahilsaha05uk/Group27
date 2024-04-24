@@ -45,7 +45,7 @@ public:
 	// IParkourPlayerInterface interface methods
 	virtual FVector GetCameraLookAt_Implementation() override;
 
-	virtual void Hang_Implementation() override;
+	virtual void Hang_Implementation(bool isLedgeDetected) override;
 	virtual void StopHamg_Implementation() override;
 	
 	// IPlayerInputInterface interface methods

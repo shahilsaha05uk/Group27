@@ -25,7 +25,7 @@ public:
 
 		
 	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
-	void Hang();
+	void Hang(bool isLedgeDetected);
 	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
 	void StopHamg();
 
