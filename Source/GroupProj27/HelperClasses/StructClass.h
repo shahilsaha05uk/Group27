@@ -53,7 +53,16 @@ public:
 	FVector Full_EndPos;
 };
 
+USTRUCT(BlueprintType)
+struct FPizzaStruct
+{
+	GENERATED_BODY()
 
+public:
+
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+	int Quality;
+};
 
 UCLASS()
 class GROUPPROJ27_API UStructClass : public UBlueprintFunctionLibrary

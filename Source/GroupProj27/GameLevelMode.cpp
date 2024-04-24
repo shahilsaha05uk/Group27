@@ -3,3 +3,6 @@
 
 #include "GameLevelMode.h"
 
+void AGameLevelMode::Decision_Implementation(EGameDecision gDecision)
+{
+}
