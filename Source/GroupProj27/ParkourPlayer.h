@@ -4,12 +4,13 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
+#include "Interfaces/ClimbInterface.h"
 #include "Interfaces/ParkourPlayerInterface.h"
 #include "Interfaces/PlayerInputInterface.h"
 #include "ParkourPlayer.generated.h"
 
 UCLASS()
-class GROUPPROJ27_API AParkourPlayer : public ACharacter, public IPlayerInputInterface, public IParkourPlayerInterface
+class GROUPPROJ27_API AParkourPlayer : public ACharacter, public IPlayerInputInterface, public IParkourPlayerInterface, public IClimbInterface
 {
 	GENERATED_BODY()
 
@@ -43,6 +44,9 @@ public:
 
 	// IParkourPlayerInterface interface methods
 	virtual FVector GetCameraLookAt_Implementation() override;
+
+	virtual void Hang_Implementation(bool isLedgeDetected) override;
+	virtual void StopHamg_Implementation() override;
 	
 	// IPlayerInputInterface interface methods
 	virtual void Move_Implementation(const FInputActionValue& Value) override;
@@ -53,6 +57,7 @@ public:
 	virtual void StopJump_Implementation(const FInputActionValue& Value) override;
 	virtual void Climb_Implementation(const FInputActionValue& Value) override;
 	virtual void Slide_Implementation(const FInputActionValue& Value) override;
+
 
 	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
 	void SetWalkSpeed(float Value);

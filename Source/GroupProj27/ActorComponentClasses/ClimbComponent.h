@@ -14,101 +14,79 @@ class GROUPPROJ27_API UClimbComponent : public UActorComponent
 	GENERATED_BODY()
 
 private:
-	FTimerHandle EdgeTestTimeHandle;
-
 	UPROPERTY()
 	AActor* mSelectedActor;
 	
-	UFUNCTION()
-	bool TraceTheNearbyLedges(TArray<AActor*>& overlappedActors);
-	UFUNCTION()
-	bool TraceTheFocussedLedge(FVector Start, FVector End, FHitResult& hit);
-	UFUNCTION()
-	bool TraceThePlatform(FVector Start, FVector End, AActor*& platformRef);
-
-	UFUNCTION()
-	void Sighting();
-
-
 public:
-	UPROPERTY(BlueprintAssignable, BlueprintCallable)
-	FOnCLimbableLedgeFoundSignature OnValidLedgeFound; 
-	// Multi Trace Members
-	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Multi Trace")
-	TArray<AActor*> mHitActors;
-	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Multi Trace")
-	TArray<AActor*> mActorsToIgnore;
-	UPROPERTY(BlueprintReadWrite, EditDefaultsOnly, Category = "Multi Trace")
-	float mSphereTraceRadius = 100.0f;
-	UPROPERTY(BlueprintReadWrite, EditDefaultsOnly, Category = "Multi Trace")
-	TArray<TEnumAsByte<EObjectTypeQuery>> mObjectType;
-	UPROPERTY(BlueprintReadWrite, EditDefaultsOnly, Category = "Multi Trace")
-	TSubclassOf<AActor> mSphereTraceToFilterClass;
 
-	// Single Trace Members
-	UPROPERTY(BlueprintReadWrite, EditDefaultsOnly, Category = "Sight Trace")
-	float mTraceDistance = 10000.0f;
-	UPROPERTY(BlueprintReadWrite, EditDefaultsOnly, Category = "Sight Trace")
-	float mClimbableDistance = 100.0f;
-	UPROPERTY(BlueprintReadWrite, EditDefaultsOnly, Category = "Sight Trace")
-	float mSightDistance = 100.0f;
-	UPROPERTY(BlueprintReadWrite, EditDefaultsOnly, Category = "Sight Trace")
-	float mSightRadius =10.0f;
-	UPROPERTY(BlueprintReadWrite, EditDefaultsOnly, Category = "Sight Trace")
-	TEnumAsByte<ETraceTypeQuery> mSightTraceChannel;
+	UPROPERTY(BlueprintReadWrite, Category = "Private")
+	FHitResult mPlatformHit;
+	UPROPERTY(BlueprintReadWrite, Category = "Private")
+	FHitResult mLedgeHit;
 	
-	UPROPERTY(BlueprintReadWrite, EditDefaultsOnly, Category = "Platform Trace")
-	TEnumAsByte<ETraceTypeQuery> mPlatformTraceChannel;
-	UPROPERTY(BlueprintReadWrite, EditDefaultsOnly, Category = "Platform Trace")
-	float mBuildingDistance = 100.0f;
+	UPROPERTY(BlueprintReadWrite, Category = "Private")
+	bool bIsValidPlatform;
+	UPROPERTY(BlueprintReadWrite, Category = "Private")
+	bool bIsValidLedge;
 
+	UPROPERTY(BlueprintReadWrite, Category = "Private")
+	bool bDetectSuccess;
+
+	
+	UPROPERTY(BlueprintReadWrite, Category = "Private")
+	FTimerHandle mDetectTimeHandler;
 	UPROPERTY(BlueprintReadWrite, Category = "Private")
 	APawn* mPawnRef;
 	UPROPERTY(BlueprintReadWrite, Category = "Private")
 	class UArrowComponent* mArrow;
-
-	// News
 	UPROPERTY(BlueprintReadWrite, Category = "Private")
-	AActor* mCurrentPlatform;
+	class UCapsuleComponent* mLedgeCollider;
+	UPROPERTY(BlueprintReadWrite, EditDefaultsOnly, Category = "Private")
+	float mCharForwardOffset;
+	UPROPERTY(BlueprintReadWrite, EditDefaultsOnly, Category = "Private")
+	float CharHeightOffset;
+	
+	UPROPERTY(BlueprintReadWrite, EditDefaultsOnly, Category = "Private | Platform")
+	float mPlatformDetectionCapsuleRadius = 55.0f;
+	UPROPERTY(BlueprintReadWrite, EditDefaultsOnly, Category = "Private | Platform")
+	float mPlatformDetectionCapsuleHeight = 42.0f;
+
+	UPROPERTY(BlueprintReadWrite, EditDefaultsOnly, Category = "Private | Ledge")
+	float mLedgeDetectionCapsuleRadius = 19.0f;
+	UPROPERTY(BlueprintReadWrite, EditDefaultsOnly, Category = "Private | Ledge")
+	float mLedgeDetectionCapsuleHeight = 42.0f;
+
 	
 	UClimbComponent();
 
 	UFUNCTION(BlueprintCallable)
-	void Init(class UArrowComponent* arrow);
+	void Init(class UArrowComponent* arrow, class UCapsuleComponent* LedgeCollider);
+
+	// Climbing
+	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
+	void AttemptToHang();
+	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
+	void StopAttemptToHang();
+	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
+	void Detect();
+	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
+	void StopDetect();
+	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
+	void Hang();
+	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
+	void StopHang();
 
 	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
-	void OnPlatformDetected(AActor* Platform);
-
-	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
-	void OnPlatformLost();
-
+	void LerpLocation(float locAlpha);
 	
 	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
-	void StartCheckingClimbPossibility();
-	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
-	void StopCheckingClimbPossibility();
-
-	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
-	void StartSighting();
-	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
-	void StopSighting();
-
-
-	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
-	void Highlight(const TArray<AActor*>& overlappedActors);
-	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
-	void Dehighlight();
-
-	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
-	void Select(AActor* actorRef, bool isStandable);
-	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
-	void Deselect();
-
-	UFUNCTION(BlueprintCallable, BlueprintPure)
-	bool isValidPlatform(AActor*& platformRef);
-	UFUNCTION(BlueprintCallable, BlueprintPure)
-	AActor* GetLedge() {return mSelectedActor;}
+	void LerpRotation(float rotAlpha);
 	
-	UFUNCTION(BlueprintCallable, BlueprintPure)
-	float GetClimbableDistanceFromPlayer(FVector hitLocation, AActor* BuildingRef);
+	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
+	bool TraceForAValidPlatform(FVector Start, FVector End, FHitResult &hit);
+	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
+	bool TraceForAValidLedge(FVector Start, FVector End, FHitResult &hit);
+
+	UFUNCTION(BlueprintPure)
+	FVector2f GetForwardOffset();
 };

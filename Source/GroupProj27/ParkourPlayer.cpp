@@ -86,6 +86,8 @@ void AParkourPlayer::Slide_Implementation(const FInputActionValue& Value)
 {
 
 }
+
+
 #pragma endregion
 
 void AParkourPlayer::SetWalkSpeed_Implementation(float Value)
@@ -98,4 +100,12 @@ FVector AParkourPlayer::GetCameraLookAt_Implementation()
 	return mCameraComponent->GetForwardVector();
 }
 
+void AParkourPlayer::Hang_Implementation(bool isLedgeDetected)
+{
+	
+}
 
+void AParkourPlayer::StopHamg_Implementation()
+{
+	
+}
