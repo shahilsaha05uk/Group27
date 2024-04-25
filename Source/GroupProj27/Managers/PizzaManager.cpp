@@ -16,5 +16,13 @@ void APizzaManager::InitiateOrders_Implementation()
 
 void APizzaManager::UpdatePizzas_Implementation()
 {
+	auto &orders = mCustomerList->Orders;
+	for (auto &p : orders)
+	{
+		auto str = p.Value;
+		str.Quality-=1;
+		p.Value = str;
+	}
+	
 	mCustomerList->OnQualityUpdated.Broadcast();
 }
