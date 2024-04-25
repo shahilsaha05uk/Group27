@@ -4,30 +4,32 @@
 
 #include "CoreMinimal.h"
 #include "Engine/DataAsset.h"
+#include "GroupProj27/HelperClasses/StructClass.h"
 #include "DA_CustomerList.generated.h"
 
-/**
- * 
- */
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnQualityUpdatedSignature);
+
 UCLASS(Blueprintable, BlueprintType)
 class GROUPPROJ27_API UDA_CustomerList : public UDataAsset
 {
 	GENERATED_BODY()
 
 public:
+	UPROPERTY(BlueprintAssignable, BlueprintCallable)
+	FOnQualityUpdatedSignature OnQualityUpdated;
 
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
 	TMap<int, class ACustomerMarker*> Customers;
 
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
-	TMap<int, class ACustomerMarker*> Orders;
+	TMap<int, FPizzaStruct> Orders;
 
 	UFUNCTION(BlueprintCallable)
-	void AddToOrderList(int OrderID);
+	void AddToOrderList(int OrderID, FPizzaStruct PizzaDetails);
 	UFUNCTION(BlueprintCallable)
 	void RemoveFromOrderList(int CustomerID);
 
-	UFUNCTION(BlueprintPure, BlueprintCallable)
+	UFUNCTION(BlueprintCallable, BlueprintPure)
 	int GetRandomCustomerID();
 
 };

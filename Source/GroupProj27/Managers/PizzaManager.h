@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
+#include "GroupProj27/HelperClasses/StructClass.h"
 #include "PizzaManager.generated.h"
 
 UCLASS()
@@ -12,18 +13,18 @@ class GROUPPROJ27_API APizzaManager : public AActor
 	GENERATED_BODY()
 	
 public:
-
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
 	class UDA_CustomerList* mCustomerList;
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
 	class UDA_Pizzas* mPizzas;
+	
+	UPROPERTY(BlueprintReadWrite)
+	FTimerHandle UpdateQualityTimerHandle;
 
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
 	void RequestOrder();
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
 	void InitiateOrders();
-	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
-	void AllocatePizza();
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
 	void UpdatePizzas();
 };

@@ -61,6 +61,8 @@ struct FPizzaStruct
 public:
 
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+	class ACustomerMarker* Customer;
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
 	int Quality;
 };
 
