@@ -2,8 +2,7 @@
 
 
 #include "PizzaManager.h"
-
-#include "GroupProj27/DataAssets/DA_Pizzas.h"
+#include "GroupProj27/DataAssets/DA_CustomerList.h"
 
 void APizzaManager::RequestOrder_Implementation()
 {
@@ -17,6 +16,5 @@ void APizzaManager::InitiateOrders_Implementation()
 
 void APizzaManager::UpdatePizzas_Implementation()
 {
-	
-	mPizzas->OnQualityUpdated.Broadcast();
+	mCustomerList->OnQualityUpdated.Broadcast();
 }

@@ -9,8 +9,6 @@
 
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnPizzaRemovedSignature, int, id);
-DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnQualityUpdatedSignature);
-
 UCLASS(Blueprintable, BlueprintType)
 class GROUPPROJ27_API UDA_Pizzas : public UDataAsset
 {
@@ -24,8 +22,6 @@ private:
 public:
 	UPROPERTY(BlueprintAssignable, BlueprintCallable)
 	FOnPizzaRemovedSignature OnPizzaRemoved;
-	UPROPERTY(BlueprintAssignable, BlueprintCallable)
-	FOnQualityUpdatedSignature OnQualityUpdated;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
 	TMap<int, class APizza*> mPizzas;

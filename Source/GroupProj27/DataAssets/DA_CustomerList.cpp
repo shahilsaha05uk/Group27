@@ -3,12 +3,12 @@
 
 #include "DA_CustomerList.h"
 
-void UDA_CustomerList::AddToOrderList(int OrderID)
+void UDA_CustomerList::AddToOrderList(int OrderID, FPizzaStruct PizzaDetails)
 {
 	// Remove from Customers
 	if(Customers.Contains(OrderID))
 	{
-		Orders.Add(OrderID);
+		Orders.Add(OrderID, PizzaDetails);
 		Customers.Remove(OrderID);
 	}
 }
@@ -18,7 +18,8 @@ void UDA_CustomerList::RemoveFromOrderList(int CustomerID)
 	//Remove from the Orders
 	if(Orders.Contains(CustomerID))
 	{
-		Customers.Add(CustomerID);
+		const auto Cust = Orders[CustomerID].Customer;
+		Customers.Add(CustomerID, Cust);
 		Orders.Remove(CustomerID);
 	}
 }
