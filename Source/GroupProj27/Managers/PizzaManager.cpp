@@ -16,3 +16,8 @@ void APizzaManager::AllocatePizza_Implementation()
 void APizzaManager::UpdatePizzas_Implementation()
 {
 }
+
+void APizzaManager::RequestOrder_Implementation()
+{
+}
+

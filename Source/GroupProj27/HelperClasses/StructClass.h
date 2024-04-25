@@ -64,6 +64,19 @@ public:
 	int Quality;
 };
 
+USTRUCT(BlueprintType)
+struct FCustomerStruct
+{
+	GENERATED_BODY()
+
+public:
+
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+	int id;
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+	FVector CustomerLocation;
+};
+
 UCLASS()
 class GROUPPROJ27_API UStructClass : public UBlueprintFunctionLibrary
 {

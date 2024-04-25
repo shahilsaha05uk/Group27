@@ -14,8 +14,12 @@ class GROUPPROJ27_API APizzaManager : public AActor
 public:
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
-	class UPizza* mPizzas;
+	class UDA_CustomerList* mCustomerList;
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
+	class UDA_Pizzas* mPizzas;
 
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
+	void RequestOrder();
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
 	void InitiateOrders();
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
