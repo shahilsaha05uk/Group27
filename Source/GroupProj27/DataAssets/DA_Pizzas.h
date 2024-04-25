@@ -4,11 +4,12 @@
 
 #include "CoreMinimal.h"
 #include "Engine/DataAsset.h"
+#include "GroupProj27/HelperClasses/StructClass.h"
 #include "DA_Pizzas.generated.h"
 
 
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnPizzaListAppendSignature, class APizza*, pizza);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnPizzaRemovedSignature, int, id);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnQualityUpdatedSignature);
 
 UCLASS(Blueprintable, BlueprintType)
 class GROUPPROJ27_API UDA_Pizzas : public UDataAsset
@@ -22,12 +23,15 @@ private:
 
 public:
 	UPROPERTY(BlueprintAssignable, BlueprintCallable)
-	FOnPizzaListAppendSignature OnPizzaListUpdated;
-	UPROPERTY(BlueprintAssignable, BlueprintCallable)
 	FOnPizzaRemovedSignature OnPizzaRemoved;
+	UPROPERTY(BlueprintAssignable, BlueprintCallable)
+	FOnQualityUpdatedSignature OnQualityUpdated;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
 	TMap<int, class APizza*> mPizzas;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
+	TMap<int, FPizzaStruct> mPizzasStruct;
 
 	UFUNCTION(BlueprintCallable)
 	void AddPizza(class APizza* pizza);

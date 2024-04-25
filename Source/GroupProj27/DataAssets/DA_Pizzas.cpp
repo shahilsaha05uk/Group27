@@ -10,8 +10,6 @@ void UDA_Pizzas::AddPizza(APizza* pizza)
 	Count++;
 	pizza->Init(Count);
 	mPizzas.Add(Count, pizza);
-
-	OnPizzaListUpdated.Broadcast(pizza);
 }
 
 void UDA_Pizzas::RemovePizza(int id)

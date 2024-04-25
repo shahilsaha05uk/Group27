@@ -7,6 +7,7 @@
 #include "GroupProj27/HelperClasses/StructClass.h"
 #include "CustomerMarker.generated.h"
 
+
 UCLASS()
 class GROUPPROJ27_API ACustomerMarker : public AActor
 {
