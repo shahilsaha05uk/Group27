@@ -28,12 +28,14 @@ public:
 	FOnQualityUpdateSignature OnQualityUpdateSignature;
 	
 	UPROPERTY(EditDefaultsOnly)
-	const int mInterval = 3000;	// the interval before the next degrade
+	int mInterval = 3000;	// the interval before the next degrade
 	UPROPERTY(EditDefaultsOnly)
-	const int mRate = 1;	// the rate at which the quality will decrease
+	int mRate = 1;	// the rate at which the quality will decrease
 	
+	UFUNCTION(BlueprintCallable, BlueprintPure)
+	int GetID(){return ID;}
 	UFUNCTION(BlueprintCallable)
-	void Init(int id);
+	void Init(int pizza_id);
 	UFUNCTION(BlueprintCallable)
 	void DegradeQuality();
 };

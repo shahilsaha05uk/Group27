@@ -4,10 +4,9 @@
 #include "Pizza.h"
 
 
-void APizza::Init(int id)
+void APizza::Init(int pizza_id)
 {
-	ID = id;
-
+	ID = pizza_id;
 	GetWorld()->GetTimerManager().SetTimer(DegradeTimeHandler, this, &APizza::DegradeQuality, mRate, true);
 }
 
