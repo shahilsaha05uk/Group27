@@ -13,11 +13,6 @@ class GROUPPROJ27_API AGameLevelMode : public AGameModeBase
 	GENERATED_BODY()
 
 public:
-	UPROPERTY(BlueprintReadWrite, Category = "APrivate")
-	class APizzaManager* mPizzaManager;
-
-	
 	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
 	void Decision(EGameDecision gDecision);
-
 };

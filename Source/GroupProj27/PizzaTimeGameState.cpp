@@ -3,23 +3,25 @@
 
 #include "PizzaTimeGameState.h"
 
-#include "DataAssets/DA_CalenderComponent.h"
-#include "DataAssets/DA_ResourceComponent.h"
+#include "Subsystems/CalenderSubsystem.h"
+#include "Subsystems/ResourceSubsystem.h"
 
 void APizzaTimeGameState::BeginPlay()
 {
-	mCalenderComp->OnWeekUpdated.AddDynamic(this, &ThisClass::OnWeekUpdated);
+	mResourceSubsystem = GetWorld()->GetSubsystem<UResourceSubsystem>();
+	CalenderSubsystem = GetWorld()->GetSubsystem<UCalenderSubsystem>();
+	CalenderSubsystem->OnWeekUpdated.AddDynamic(this, &ThisClass::OnWeekUpdated);
 	Super::BeginPlay();
 }
 
 void APizzaTimeGameState::OnWeekUpdated_Implementation(int CurrentWeek)
 {
-	if(mResourcesComp->GetCurrentBalance() < TargetResourceThreshold) CurrentStrikes++;
+	if(mResourceSubsystem->GetCurrentBalance() < TargetResourceThreshold) CurrentStrikes++;
 	
 	const EGameDecision decision = (CurrentStrikes >= TargetResourceThreshold) ? LOSE : CONTINUE;
 
-	mResourcesComp->DeductBalance(TargetResourceThreshold);
-	mCalenderComp->ResetDays();
+	mResourceSubsystem->DeductBalance(TargetResourceThreshold);
+	CalenderSubsystem->ResetDays();
 	OnGameStateProcessed.Broadcast(decision);
 }
 

@@ -3,15 +3,14 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Engine/DataAsset.h"
-#include "DA_ResourceComponent.generated.h"
+#include "Subsystems/Subsystem.h"
+#include "ResourceSubsystem.generated.h"
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnCurrentBalanceUpdateSignature, int, CurentBalance);
 UCLASS(BlueprintType, Blueprintable)
-class GROUPPROJ27_API UDA_ResourceComponent : public UPrimaryDataAsset
+class GROUPPROJ27_API UResourceSubsystem : public UWorldSubsystem
 {
 	GENERATED_BODY()
-
 private:
 	UPROPERTY()
 	int mCurrentResource;
@@ -30,4 +29,5 @@ public:
 	void AddBalance(int increaseBy);
 	UFUNCTION(BlueprintCallable)
 	void DeductBalance(int decreaseBy);
+
 };
