@@ -1,14 +1,14 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "DA_CalenderComponent.h"
+#include "CalenderSubsystem.h"
 
-void UDA_CalenderComponent::UpdateDay()
+void UCalenderSubsystem::UpdateDay()
 {
 	CurrentDay++;
 }
 
-void UDA_CalenderComponent::ResetDays()
+void UCalenderSubsystem::ResetDays()
 {
 	CurrentDay = DefaultDay;
 	CurrentWeek++;

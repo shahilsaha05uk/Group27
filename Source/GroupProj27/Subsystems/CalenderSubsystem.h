@@ -3,16 +3,15 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Engine/DataAsset.h"
-#include "DA_CalenderComponent.generated.h"
+#include "Subsystems/WorldSubsystem.h"
+#include "CalenderSubsystem.generated.h"
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnWeekUpdatedSignature, int, CurrentWeek);
 
 UCLASS()
-class GROUPPROJ27_API UDA_CalenderComponent : public UPrimaryDataAsset
+class GROUPPROJ27_API UCalenderSubsystem : public UWorldSubsystem
 {
 	GENERATED_BODY()
-
 private:
 
 	UPROPERTY()
@@ -38,4 +37,5 @@ public:
 	void UpdateDay();
 	UFUNCTION(BlueprintCallable)
 	void ResetDays();
+
 };

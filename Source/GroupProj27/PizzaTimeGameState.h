@@ -30,9 +30,9 @@ public:
 	FOnGameStateProcessedSignature OnGameStateProcessed;
 	
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
-	class UDA_ResourceComponent* mResourcesComp;
+	class UCalenderSubsystem* CalenderSubsystem;
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
-	class UDA_CalenderComponent* mCalenderComp;
+	class UResourceSubsystem* mResourceSubsystem;
 
 	virtual void BeginPlay() override;
 
