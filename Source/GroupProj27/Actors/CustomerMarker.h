@@ -16,6 +16,8 @@ class GROUPPROJ27_API ACustomerMarker : public AActor
 public:
 
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+	int id;
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
 	FCustomerStruct mCustomerDetails;
 
 };

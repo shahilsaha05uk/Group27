@@ -3,6 +3,7 @@
 
 #include "PizzaManager.h"
 #include "GroupProj27/DataAssets/DA_CustomerList.h"
+#include "GroupProj27/DataAssets/DA_OrderComponent.h"
 
 void APizzaManager::RequestOrder_Implementation()
 {
@@ -16,13 +17,15 @@ void APizzaManager::InitiateOrders_Implementation()
 
 void APizzaManager::UpdatePizzas_Implementation()
 {
-	auto &orders = mCustomerList->Orders;
-	for (auto &p : orders)
-	{
-		auto str = p.Value;
-		str.Quality-=1;
-		p.Value = str;
-	}
+
+}
+
+void APizzaManager::UpdateOrderList_Implementation(int id, FPizzaStruct order)
+{
+	mOrderList->AddOrder(id, order);
+}
+
+void APizzaManager::StartPizzaTimer_Implementation()
+{
 	
-	mCustomerList->OnQualityUpdated.Broadcast();
 }

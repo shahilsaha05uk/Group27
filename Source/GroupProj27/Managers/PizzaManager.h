@@ -14,6 +14,8 @@ class GROUPPROJ27_API APizzaManager : public AActor
 	
 public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
+	class UDA_OrderComponent* mOrderList;
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
 	class UDA_CustomerList* mCustomerList;
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
 	class UDA_Pizzas* mPizzas;
@@ -22,9 +24,13 @@ public:
 	FTimerHandle UpdateQualityTimerHandle;
 
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
+	void StartPizzaTimer();
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
 	void RequestOrder();
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
 	void InitiateOrders();
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
+	void UpdateOrderList(int id, FPizzaStruct order);
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
 	void UpdatePizzas();
 };
