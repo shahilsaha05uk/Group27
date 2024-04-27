@@ -20,6 +20,8 @@ public:
 	UPROPERTY(BlueprintCallable, BlueprintAssignable)
 	FOnCurrentBalanceUpdateSignature OnBalanceUpdate;
 
+	virtual void Deinitialize() override;
+	
 	UPROPERTY(EditDefaultsOnly, Category = "Public")
 	int mStartingResource;
 

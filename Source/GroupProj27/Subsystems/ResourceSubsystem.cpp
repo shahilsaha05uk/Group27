@@ -1,5 +1,11 @@
 #include "ResourceSubsystem.h"
 
+void UResourceSubsystem::Deinitialize()
+{
+	OnBalanceUpdate.Clear();
+	Super::Deinitialize();
+}
+
 void UResourceSubsystem::AddBalance(int increaseBy)
 {
 	mCurrentResource += increaseBy;

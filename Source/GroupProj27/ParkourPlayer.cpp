@@ -100,6 +100,11 @@ FVector AParkourPlayer::GetCameraLookAt_Implementation()
 	return mCameraComponent->GetForwardVector();
 }
 
+void AParkourPlayer::ReachedDestination_Implementation(int ID)
+{
+	
+}
+
 void AParkourPlayer::Hang_Implementation(bool isLedgeDetected)
 {
 	

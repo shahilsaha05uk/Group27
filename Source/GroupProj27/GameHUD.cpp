@@ -9,4 +9,11 @@ UBaseWidget* AGameHUD::InitiateWidget_Implementation(EWidgetType type)
 	if(!widgetClass) return nullptr;
 	
 	return CreateWidget<UBaseWidget>(GetOwningPlayerController(), widgetClass);
+
+
+	TArray<FString> Arr;
+	for (auto Val : Arr)
+	{
+		Arr.Remove(Val);
+	}
 }

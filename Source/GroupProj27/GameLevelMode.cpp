@@ -3,6 +3,27 @@
 
 #include "GameLevelMode.h"
 
-void AGameLevelMode::Decision_Implementation(EGameDecision gDecision)
+#include "PizzaTimeGameState.h"
+
+
+void AGameLevelMode::PostLogin(APlayerController* NewPlayer)
 {
+	mPizzaGameState = GetGameState<APizzaTimeGameState>();
+	if(mPizzaGameState)
+	{
+		mPizzaGameState->OnMoneyStateUpdated.AddDynamic(this, &ThisClass::MakeDecisionBasedOnMoney);
+	}
+	Super::PostLogin(NewPlayer);
+
 }
+
+void AGameLevelMode::RequestForOrders_Implementation()
+{
+	
+}
+
+void AGameLevelMode::MakeDecisionBasedOnMoney_Implementation(int CurrentBalance)
+{
+	
+}
+
