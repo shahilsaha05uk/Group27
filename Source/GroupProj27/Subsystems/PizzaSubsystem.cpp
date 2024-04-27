@@ -42,8 +42,13 @@ bool UPizzaSubsystem::CreateOrder(int CustomerID, FPizzaStruct order)
 bool UPizzaSubsystem::RemoveOrder(int CustomerID)
 {
 	if(!Orders.Contains(CustomerID)) return false;
-	Orders.Remove(CustomerID);
+	const auto order = Orders[CustomerID];
+	
 	OnOrderComplete.Broadcast(CustomerID);
+	Orders.Remove(CustomerID);
+
+	OnProduceOrderSummary.Broadcast(order);
+
 	return true;
 }
 #pragma endregion

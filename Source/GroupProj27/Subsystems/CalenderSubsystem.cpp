@@ -3,6 +3,11 @@
 
 #include "CalenderSubsystem.h"
 
+void UCalenderSubsystem::StartDay()
+{
+	OnDayStarted.Broadcast();
+}
+
 void UCalenderSubsystem::UpdateDay()
 {
 	CurrentDay++;
