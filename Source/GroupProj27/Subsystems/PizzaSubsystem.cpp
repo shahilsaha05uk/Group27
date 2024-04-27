@@ -86,7 +86,14 @@ void UPizzaSubsystem::UpdateQuality()
 {
 	for (auto& o : Orders)
 	{
-		o.Value.Quality-=mQualityDecreaseRate;
+		int &quality = o.Value.Quality;
+		FString &review = o.Value.Review; 
+		quality-=mQualityDecreaseRate;
+
+		if(quality >= 70) review = "Perfect!!";
+		else if(quality >= 40 && quality <70) review = "Good!!";
+		else if(quality >= 10 && quality <40) review = "Average!!";
+		else review = "POOP!!!";
 	}
 	OnQualityUpdated.Broadcast();
 }

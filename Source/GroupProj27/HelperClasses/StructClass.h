@@ -75,15 +75,12 @@ struct FPizzaStruct
 	GENERATED_BODY()
 
 public:
-
-	/*
-	UPROPERTY(BlueprintReadWrite, EditAnywhere)
-	int ID;
-	*/
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
 	class ACustomerMarker* Customer;
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
 	int Quality;
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+	FString Review;
 };
 
 USTRUCT(BlueprintType)

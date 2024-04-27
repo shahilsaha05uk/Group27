@@ -20,9 +20,13 @@ void UCalenderSubsystem::UpdateDay()
 	CurrentDay++;
 }
 
+void UCalenderSubsystem::UpdateWeek()
+{
+	CurrentWeek++;
+}
+
 void UCalenderSubsystem::ResetDays()
 {
 	CurrentDay = DefaultDay;
-	CurrentWeek++;
 }
 
