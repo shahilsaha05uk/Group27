@@ -7,6 +7,7 @@
 #include "CalenderSubsystem.generated.h"
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnWeekUpdatedSignature, int, CurrentWeek);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnDayStartedSignature);
 
 UCLASS()
 class GROUPPROJ27_API UCalenderSubsystem : public UWorldSubsystem
@@ -27,12 +28,16 @@ private:
 public:
 	UPROPERTY(BlueprintAssignable, BlueprintCallable)
 	FOnWeekUpdatedSignature OnWeekUpdated;
+	UPROPERTY(BlueprintAssignable, BlueprintCallable)
+	FOnDayStartedSignature OnDayStarted;
 	
 	UFUNCTION(BlueprintPure, BlueprintCallable)
 	int GetCurrentDay() {return CurrentDay;}
 	UFUNCTION(BlueprintPure, BlueprintCallable)
 	int GetCurrentWeek() {return CurrentWeek; }
 	
+	UFUNCTION(BlueprintCallable)
+	void StartDay();
 	UFUNCTION(BlueprintCallable)
 	void UpdateDay();
 	UFUNCTION(BlueprintCallable)

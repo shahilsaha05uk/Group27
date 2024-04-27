@@ -10,6 +10,7 @@
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnQualityUpdatedSignature);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnOrderCreateSignature, int, CustomerID);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnOrderCompleteSignature, int, CustomerID);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FProduceOrderSummarySignature, FPizzaStruct, Summary);
 
 UCLASS()
 class GROUPPROJ27_API UPizzaSubsystem : public UWorldSubsystem
@@ -26,6 +27,8 @@ private:
 	int mQualityDecreaseRate;
 public:
 
+	UPROPERTY(BlueprintAssignable, BlueprintCallable)
+	FProduceOrderSummarySignature OnProduceOrderSummary;
 	UPROPERTY(BlueprintAssignable, BlueprintCallable)
 	FOnOrderCreateSignature OnOrderCreated;
 	UPROPERTY(BlueprintAssignable, BlueprintCallable)
