@@ -4,10 +4,10 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/GameModeBase.h"
-#include "HelperClasses/EnumClass.h"
-#include "HelperClasses/StructClass.h"
 #include "Interfaces/PizzaModeInterface.h"
 #include "GameLevelMode.generated.h"
+
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnMoneyStateUpdatedSignature, int, CurrentMoney);
 
 UCLASS()
 class GROUPPROJ27_API AGameLevelMode : public AGameModeBase, public IPizzaModeInterface
@@ -16,15 +16,13 @@ class GROUPPROJ27_API AGameLevelMode : public AGameModeBase, public IPizzaModeIn
 
 public:
 
-	UPROPERTY(BlueprintReadOnly)
-	class APizzaTimeGameState* mPizzaGameState;
+	UPROPERTY(BlueprintAssignable, BlueprintCallable)
+	FOnMoneyStateUpdatedSignature OnMoneyStateUpdated;
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 	int TargetResourceThreshold = 1000;
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 	int TotalStrikes;
 	
-
-	virtual void PostLogin(APlayerController* NewPlayer) override;
 
 	virtual void RequestForOrders_Implementation() override;
 

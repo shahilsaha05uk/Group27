@@ -43,6 +43,7 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void UpdateDay();
 	UFUNCTION(BlueprintCallable)
+	void UpdateWeek();
+	UFUNCTION(BlueprintCallable)
 	void ResetDays();
-
 };
