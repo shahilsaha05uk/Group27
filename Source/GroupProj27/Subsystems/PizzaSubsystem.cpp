@@ -3,6 +3,18 @@
 
 #include "PizzaSubsystem.h"
 
+void UPizzaSubsystem::Deinitialize()
+{
+	OnAllOrdersComplete.Clear();
+	OnProduceOrderSummary.Clear();
+	OnOrderCreated.Clear();
+	OnOrderComplete.Clear();
+	OnQualityUpdated.Clear();
+	Super::Deinitialize();
+}
+
+
+
 #pragma region Customer
 void UPizzaSubsystem::AddCustomers(TMap<int, ACustomerMarker*> CustomerMap)
 {
@@ -39,18 +51,22 @@ bool UPizzaSubsystem::CreateOrder(int CustomerID, FPizzaStruct order)
 	return true;
 }
 
-bool UPizzaSubsystem::RemoveOrder(int CustomerID)
+bool UPizzaSubsystem::OrderComplete(int CustomerID)
 {
 	if(!Orders.Contains(CustomerID)) return false;
 	const auto order = Orders[CustomerID];
-	
-	OnOrderComplete.Broadcast(CustomerID);
+
+	OnOrderComplete.Broadcast(CustomerID, order);
 	Orders.Remove(CustomerID);
-
-	OnProduceOrderSummary.Broadcast(order);
-
+	
+	if(Orders.IsEmpty())
+	{
+		OnAllOrdersComplete.Broadcast();
+	}
 	return true;
 }
+
+
 #pragma endregion
 
 #pragma region Quality Management

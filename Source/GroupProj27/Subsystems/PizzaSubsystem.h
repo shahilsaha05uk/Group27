@@ -8,8 +8,9 @@
 #include "PizzaSubsystem.generated.h"
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnQualityUpdatedSignature);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnAllOrdersCompleteSignature);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnOrderCreateSignature, int, CustomerID);
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnOrderCompleteSignature, int, CustomerID);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnOrderCompleteSignature, int, CustomerID, FPizzaStruct, OrderSummary);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FProduceOrderSummarySignature, FPizzaStruct, Summary);
 
 UCLASS()
@@ -27,6 +28,10 @@ private:
 	int mQualityDecreaseRate;
 public:
 
+	virtual void Deinitialize() override;
+	
+	UPROPERTY(BlueprintAssignable, BlueprintCallable)
+	FOnAllOrdersCompleteSignature OnAllOrdersComplete;
 	UPROPERTY(BlueprintAssignable, BlueprintCallable)
 	FProduceOrderSummarySignature OnProduceOrderSummary;
 	UPROPERTY(BlueprintAssignable, BlueprintCallable)
@@ -52,7 +57,7 @@ public:
 	UFUNCTION(BlueprintCallable)
 	bool CreateOrder(int CustomerID, FPizzaStruct order);
 	UFUNCTION(BlueprintCallable)
-	bool RemoveOrder(int CustomerID);
+	bool OrderComplete(int CustomerID);
 
 	// Quality Management
 	UFUNCTION(BlueprintCallable)
@@ -63,6 +68,8 @@ public:
 	void UpdateQuality();
 
 	// Getters and Setters
+	UFUNCTION(BlueprintCallable, BlueprintPure)
+	bool CanTakeOrders() { return Orders.IsEmpty(); }
 	UFUNCTION(BlueprintCallable, BlueprintPure)
 	FPizzaStruct GetPizzaStatus(int CustomerID);
 

@@ -5,9 +5,10 @@
 #include "CoreMinimal.h"
 #include "GameFramework/GameStateBase.h"
 #include "HelperClasses/EnumClass.h"
+#include "HelperClasses/StructClass.h"
 #include "PizzaTimeGameState.generated.h"
 
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnGameStateProcessedSignature, EGameDecision, decision);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnMoneyStateUpdatedSignature, int, CurrentMoney);
 
 UCLASS()
 class GROUPPROJ27_API APizzaTimeGameState : public AGameStateBase
@@ -21,14 +22,11 @@ private:
 
 public:
 
-	UPROPERTY(EditDefaultsOnly)
-	int TargetResourceThreshold = 1000;
-	UPROPERTY(EditDefaultsOnly)
-	int TotalStrikes;
-	
 	UPROPERTY(BlueprintCallable, BlueprintAssignable)
-	FOnGameStateProcessedSignature OnGameStateProcessed;
+	FOnMoneyStateUpdatedSignature OnMoneyStateUpdated;
 	
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
+	class UPizzaSubsystem* mPizzaSubsystem;
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
 	class UCalenderSubsystem* CalenderSubsystem;
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
@@ -36,9 +34,6 @@ public:
 
 	virtual void BeginPlay() override;
 
-	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
-	void OnWeekUpdated(int CurrentWeek);
-
-	UFUNCTION(BlueprintPure, BlueprintCallable)
-	int GetCurrentStrikes() {return CurrentStrikes;}
+	UFUNCTION(BlueprintCallable)
+	void OnMoneyUpdated(int CurentBalance);
 };

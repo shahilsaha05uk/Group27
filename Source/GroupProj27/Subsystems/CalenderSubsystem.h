@@ -30,6 +30,8 @@ public:
 	FOnWeekUpdatedSignature OnWeekUpdated;
 	UPROPERTY(BlueprintAssignable, BlueprintCallable)
 	FOnDayStartedSignature OnDayStarted;
+
+	virtual void Deinitialize() override;
 	
 	UFUNCTION(BlueprintPure, BlueprintCallable)
 	int GetCurrentDay() {return CurrentDay;}
