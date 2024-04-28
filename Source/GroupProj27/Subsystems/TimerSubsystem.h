@@ -3,14 +3,14 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Subsystems/WorldSubsystem.h"
+#include "Subsystems/GameInstanceSubsystem.h"
 #include "TimerSubsystem.generated.h"
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FStartCountdownTimerSignature, float, Duration, float, rate);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FFinishedCountdownTimerSignature);
 
 UCLASS()
-class GROUPPROJ27_API UTimerSubsystem : public UWorldSubsystem
+class GROUPPROJ27_API UTimerSubsystem : public UGameInstanceSubsystem
 {
 	GENERATED_BODY()
 public:

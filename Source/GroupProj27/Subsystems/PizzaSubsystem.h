@@ -4,9 +4,10 @@
 
 #include "CoreMinimal.h"
 #include "GroupProj27/HelperClasses/StructClass.h"
-#include "Subsystems/WorldSubsystem.h"
+#include "Subsystems/GameInstanceSubsystem.h"
 #include "PizzaSubsystem.generated.h"
 
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnReadyToTakeOrderSignature);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnQualityUpdatedSignature);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnAllOrdersCompleteSignature);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnOrderCreateSignature, int, CustomerID);
@@ -14,7 +15,7 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnOrderCompleteSignature, int, Cus
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FProduceOrderSummarySignature, FPizzaStruct, Summary);
 
 UCLASS()
-class GROUPPROJ27_API UPizzaSubsystem : public UWorldSubsystem
+class GROUPPROJ27_API UPizzaSubsystem : public UGameInstanceSubsystem
 {
 	GENERATED_BODY()
 
@@ -30,6 +31,8 @@ public:
 
 	virtual void Deinitialize() override;
 	
+	UPROPERTY(BlueprintAssignable, BlueprintCallable)
+	FOnReadyToTakeOrderSignature OnReadyToTakeOrder;
 	UPROPERTY(BlueprintAssignable, BlueprintCallable)
 	FOnAllOrdersCompleteSignature OnAllOrdersComplete;
 	UPROPERTY(BlueprintAssignable, BlueprintCallable)

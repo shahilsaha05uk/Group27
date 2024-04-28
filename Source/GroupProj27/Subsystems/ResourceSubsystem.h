@@ -3,12 +3,12 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Subsystems/Subsystem.h"
+#include "Subsystems/GameInstanceSubsystem.h"
 #include "ResourceSubsystem.generated.h"
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnCurrentBalanceUpdateSignature, int, CurentBalance);
 UCLASS(BlueprintType, Blueprintable)
-class GROUPPROJ27_API UResourceSubsystem : public UWorldSubsystem
+class GROUPPROJ27_API UResourceSubsystem : public UGameInstanceSubsystem
 {
 	GENERATED_BODY()
 private:
