@@ -12,7 +12,6 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnQualityUpdatedSignature);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnAllOrdersCompleteSignature);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnOrderCreateSignature, int, CustomerID);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnOrderCompleteSignature, int, CustomerID, FPizzaStruct, OrderSummary);
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FProduceOrderSummarySignature, FPizzaStruct, Summary);
 
 UCLASS()
 class GROUPPROJ27_API UPizzaSubsystem : public UGameInstanceSubsystem
@@ -36,8 +35,6 @@ public:
 	UPROPERTY(BlueprintAssignable, BlueprintCallable)
 	FOnAllOrdersCompleteSignature OnAllOrdersComplete;
 	UPROPERTY(BlueprintAssignable, BlueprintCallable)
-	FProduceOrderSummarySignature OnProduceOrderSummary;
-	UPROPERTY(BlueprintAssignable, BlueprintCallable)
 	FOnOrderCreateSignature OnOrderCreated;
 	UPROPERTY(BlueprintAssignable, BlueprintCallable)
 	FOnOrderCompleteSignature OnOrderComplete;
@@ -51,10 +48,6 @@ public:
 	// Customer Management
 	UFUNCTION(BlueprintCallable)
 	void AddCustomers(TMap<int, class ACustomerMarker*> CustomerMap);
-	UFUNCTION(BlueprintCallable)
-	void AddCustomer(int ID, class ACustomerMarker* Customer);
-	UFUNCTION(BlueprintCallable)
-	bool RemoveCustomer(int ID);
 
 	// Order Management
 	UFUNCTION(BlueprintCallable)

@@ -7,21 +7,20 @@
 #include "CalenderSubsystem.generated.h"
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnCalenderUpdatedSignature, int, Week, int, Day);
+
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnDayStartedSignature);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnDayCompleteSignature, bool, HasReachedShop);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnWeekCompleteSignature);
+
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FStartCountdownTimerSignature, float, Duration, float, rate);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FFinishedCountdownTimerSignature);
+
 
 UCLASS()
 class GROUPPROJ27_API UCalenderSubsystem : public UGameInstanceSubsystem
 {
 	GENERATED_BODY()
 private:
-
-	UPROPERTY()
-	int DefaultDay = 0;
-	UPROPERTY()
-	int DefaultWeek = 0;
-
-	
 	UPROPERTY()
 	int CurrentDay = 0;
 	UPROPERTY()
@@ -37,6 +36,15 @@ public:
 	UPROPERTY(BlueprintAssignable, BlueprintCallable)
 	FOnDayCompleteSignature OnDayComplete;
 
+	UPROPERTY(BlueprintAssignable, BlueprintCallable)
+	FStartCountdownTimerSignature OnStartCountdown;
+	
+	UPROPERTY(BlueprintAssignable, BlueprintCallable)
+	FFinishedCountdownTimerSignature OnFinishCountdown;
+	
+	UPROPERTY(BlueprintAssignable, BlueprintCallable)
+	FOnWeekCompleteSignature OnWeekComplete;
+
 	virtual void Deinitialize() override;
 	
 	UFUNCTION(BlueprintPure, BlueprintCallable)
@@ -45,11 +53,9 @@ public:
 	int GetCurrentWeek() {return CurrentWeek; }
 	
 	UFUNCTION(BlueprintCallable)
+	void UpdateCalender();
+	UFUNCTION(BlueprintCallable)
 	void StartDay();
 	UFUNCTION(BlueprintCallable)
-	void UpdateDay();
-	UFUNCTION(BlueprintCallable)
-	void UpdateWeek();
-	UFUNCTION(BlueprintCallable)
-	void ResetDays();
+	void EndDay(bool HasReachedShop);
 };

@@ -6,7 +6,6 @@
 void UPizzaSubsystem::Deinitialize()
 {
 	OnAllOrdersComplete.Clear();
-	OnProduceOrderSummary.Clear();
 	OnOrderCreated.Clear();
 	OnOrderComplete.Clear();
 	OnQualityUpdated.Clear();
@@ -22,20 +21,6 @@ void UPizzaSubsystem::AddCustomers(TMap<int, ACustomerMarker*> CustomerMap)
 	Customers = CustomerMap;
 }
 
-void UPizzaSubsystem::AddCustomer(int ID, ACustomerMarker* Customer)
-{
-	if(Customers.Contains(ID)) return;	// Check for duplicates
-	Customers.Add(ID, Customer);
-}
-
-bool UPizzaSubsystem::RemoveCustomer(int ID)
-{
-	if(Customers.Contains(ID)) {
-		Customers.Remove(ID);
-		return true;
-	}
-	return false;
-}
 #pragma endregion
 
 #pragma region Order
@@ -90,6 +75,7 @@ void UPizzaSubsystem::UpdateQuality()
 		FString &review = o.Value.Review; 
 		quality-=mQualityDecreaseRate;
 
+		//TODO: Improve this condition
 		if(quality >= 70) review = "Perfect!!";
 		else if(quality >= 40 && quality <70) review = "Good!!";
 		else if(quality >= 10 && quality <40) review = "Average!!";

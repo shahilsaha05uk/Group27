@@ -22,14 +22,11 @@ public:
 
 	virtual void Deinitialize() override;
 	
-	UPROPERTY(EditDefaultsOnly, Category = "Public")
-	int mStartingResource;
-
 	UFUNCTION(BlueprintPure)
 	int GetCurrentBalance(){return mCurrentResource;}
 	UFUNCTION(BlueprintCallable)
-	void AddBalance(int increaseBy);
+	int AddBalance(int increaseBy);
 	UFUNCTION(BlueprintCallable)
-	void DeductBalance(int decreaseBy);
+	int DeductBalance(int decreaseBy);
 
 };
