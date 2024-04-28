@@ -13,7 +13,6 @@ void UPizzaSubsystem::Deinitialize()
 }
 
 
-
 #pragma region Customer
 void UPizzaSubsystem::AddCustomers(TMap<int, ACustomerMarker*> CustomerMap)
 {
@@ -57,11 +56,12 @@ bool UPizzaSubsystem::OrderComplete(int CustomerID)
 #pragma region Quality Management
 void UPizzaSubsystem::StartQualityTimer(float rate, int qualityDecreaseRate, bool bLoop)
 {
+	if (QualityTimerHandle.IsValid()) return;
 	mQualityDecreaseRate = qualityDecreaseRate;
 	GetWorld()->GetTimerManager().SetTimer(QualityTimerHandle, this, &UPizzaSubsystem::UpdateQuality, rate, bLoop);
 }
 
-void UPizzaSubsystem::StopQualityTimer()
+void UPizzaSubsystem::FinishedQualityTimer()
 {
 	GetWorld()->GetTimerManager().ClearTimer(QualityTimerHandle);
 	QualityTimerHandle.Invalidate();

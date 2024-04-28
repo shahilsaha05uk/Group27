@@ -7,6 +7,7 @@
 #include "Subsystems/GameInstanceSubsystem.h"
 #include "PizzaSubsystem.generated.h"
 
+
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnReadyToTakeOrderSignature);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnQualityUpdatedSignature);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnAllOrdersCompleteSignature);
@@ -59,7 +60,7 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void StartQualityTimer(float rate, int qualityDecreaseRate, bool bLoop);
 	UFUNCTION(BlueprintCallable)
-	void StopQualityTimer();
+	void FinishedQualityTimer();
 	UFUNCTION(BlueprintCallable)
 	void UpdateQuality();
 

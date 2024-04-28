@@ -20,7 +20,7 @@ void UCalenderSubsystem::Deinitialize()
 
 void UCalenderSubsystem::UpdateCalender()
 {
-	if(CurrentDay >=1)	// if the Current Day is >=5
+	if(CurrentDay >=5)	// if the Current Day is >=5
 	{
 		CurrentWeek++;
 		CurrentDay = 1;
@@ -40,7 +40,17 @@ void UCalenderSubsystem::StartDay()
 	OnDayStarted.Broadcast();
 }
 
-void UCalenderSubsystem::EndDay(bool HasReachedShop)
+void UCalenderSubsystem::EndDay()
 {
-	OnDayComplete.Broadcast(HasReachedShop);
+	OnDayComplete.Broadcast();
+}
+
+void UCalenderSubsystem::StartCountdown(float Duration, float rate)
+{
+	OnStartCountdown.Broadcast(Duration, rate);
+}
+
+void UCalenderSubsystem::EndCountdown()
+{
+	OnFinishCountdown.Broadcast();
 }

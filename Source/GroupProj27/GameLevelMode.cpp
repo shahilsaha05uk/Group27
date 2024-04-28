@@ -11,12 +11,12 @@
 void AGameLevelMode::OnPostLogin(AController* NewPlayer)
 {
 	Super::OnPostLogin(NewPlayer);
+	bHasReached = false;
 
 	const auto Instance = GetGameInstance();
 	PizzaSubsystem = Instance->GetSubsystem<UPizzaSubsystem>();
 	CalenderSubsystem = Instance->GetSubsystem<UCalenderSubsystem>();
 	ResourceSubsystem = Instance->GetSubsystem<UResourceSubsystem>();
-	
 	if(PizzaSubsystem)
 	{
 		PizzaSubsystem->OnReadyToTakeOrder.AddDynamic(this, &ThisClass::OnReadyToTakeOrder);
@@ -28,11 +28,10 @@ void AGameLevelMode::OnPostLogin(AController* NewPlayer)
 		CalenderSubsystem->OnDayStarted.AddDynamic(this, &ThisClass::StartDay);
 		CalenderSubsystem->OnDayComplete.AddDynamic(this, &ThisClass::FinishDay);
 		CalenderSubsystem->OnWeekComplete.AddDynamic(this, &ThisClass::OnWeekComplete);
-		CalenderSubsystem->OnStartCountdown.AddDynamic(this, &ThisClass::OnCountdownStart);
-		CalenderSubsystem->OnFinishCountdown.AddDynamic(this, &ThisClass::OnCountdownEnd);
 	}
 	if(ResourceSubsystem)
 	{
+		// Adds the starting balance to the current balamce
 		ResourceSubsystem->AddBalance(mStartingBalance);
 	}
 }
@@ -41,10 +40,6 @@ void AGameLevelMode::RequestForOrders_Implementation()
 {
 	
 }
-
-#pragma region Private methods
-
-#pragma endregion
 
 #pragma region Calender Bind methods
 
@@ -55,12 +50,9 @@ void AGameLevelMode::StartDay_Implementation()
 	Execute_RequestForOrders(this);
 }
 
-void AGameLevelMode::FinishDay_Implementation(bool HasReached)
+void AGameLevelMode::FinishDay_Implementation()
 {
-	if(HasReached)
-	{
-		CalenderSubsystem->OnFinishCountdown.Broadcast();
-	}
+	
 }
 
 void AGameLevelMode::OnWeekComplete_Implementation()
@@ -97,21 +89,8 @@ void AGameLevelMode::OnAllOrdersComplete_Implementation()
 {
 	if(CalenderSubsystem)
 	{
-		CalenderSubsystem->OnStartCountdown.Broadcast(mCountdownDuration, mRate);
+		CalenderSubsystem->StartCountdown(mCountdownDuration, mRate);
 	}
-}
-
-#pragma endregion
-
-#pragma region TimerSubsystem
-
-void AGameLevelMode::OnCountdownStart_Implementation(float Duration, float Rate)
-{
-}
-
-void AGameLevelMode::OnCountdownEnd_Implementation()
-{
-	//FinishDay(bHasReachedShop);
 }
 
 #pragma endregion
@@ -121,6 +100,34 @@ void AGameLevelMode::OnCountdownEnd_Implementation()
 void AGameLevelMode::MakeDecisionBasedOnMoney_Implementation(int CurrentBalance)
 {
 	
+}
+
+void AGameLevelMode::OnPlayerArrival_Implementation(EPlayerArrivalStatus Status)
+{
+	//OnPlayerArrivedAtTheShop.Broadcast(HasReachedShop);
+
+	switch (Status)
+	{
+	case ARRIVED:
+		CalenderSubsystem->EndCountdown();
+		if (PizzaSubsystem->CanTakeOrders())
+		{
+			CalenderSubsystem->StartDay();
+		}
+		break;
+	case YET_TO_ARRIVE:
+		break;
+	case LATE:
+		if (PizzaSubsystem->CanTakeOrders())
+		{
+			//TODO: Needs to be looked at
+			//CalenderSubsystem->StartDay();
+		}
+		break;
+	default:
+		break;
+	}
+	OnPlayerArrivedAtTheShop.Broadcast(Status);
 }
 
 #pragma endregion

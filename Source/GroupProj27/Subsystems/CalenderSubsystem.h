@@ -3,17 +3,19 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "GroupProj27/HelperClasses/EnumClass.h"
 #include "Subsystems/GameInstanceSubsystem.h"
 #include "CalenderSubsystem.generated.h"
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnCalenderUpdatedSignature, int, Week, int, Day);
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnDayStartedSignature);
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnDayCompleteSignature, bool, HasReachedShop);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnDayCompleteSignature);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnWeekCompleteSignature);
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FStartCountdownTimerSignature, float, Duration, float, rate);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FFinishedCountdownTimerSignature);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnCountdownStatusUpdateSignature, ECountdownStatus, Status);
 
 
 UCLASS()
@@ -40,6 +42,8 @@ public:
 	FStartCountdownTimerSignature OnStartCountdown;
 	
 	UPROPERTY(BlueprintAssignable, BlueprintCallable)
+	FOnCountdownStatusUpdateSignature OnCountdownUpdate;
+	UPROPERTY(BlueprintAssignable, BlueprintCallable)
 	FFinishedCountdownTimerSignature OnFinishCountdown;
 	
 	UPROPERTY(BlueprintAssignable, BlueprintCallable)
@@ -57,5 +61,10 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void StartDay();
 	UFUNCTION(BlueprintCallable)
-	void EndDay(bool HasReachedShop);
+	void EndDay();
+
+	UFUNCTION(BlueprintCallable)
+	void StartCountdown(float Duration, float rate);
+	UFUNCTION(BlueprintCallable)
+	void EndCountdown();
 };

@@ -10,7 +10,7 @@
 #include "Subsystems/ResourceSubsystem.h"
 #include "GameLevelMode.generated.h"
 
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnMoneyStateUpdatedSignature, int, CurrentMoney);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnPlayerOnArrivedAtTheShopSignature, EPlayerArrivalStatus, Status);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnDecisionMade, EGameDecision, Decision);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnStrikesUpdated, int, Strikes);
 
@@ -37,7 +37,12 @@ public:
 	int TotalStrikes;
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Private")
 	int mStartingBalance;
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Private")
+	bool bHasReached;
 
+
+	UPROPERTY(BlueprintAssignable, BlueprintCallable)
+	FOnPlayerOnArrivedAtTheShopSignature OnPlayerArrivedAtTheShop;
 	UPROPERTY(BlueprintAssignable, BlueprintCallable)
 	FOnDecisionMade OnDecisionMade;
 	UPROPERTY(BlueprintAssignable, BlueprintCallable)
@@ -60,22 +65,18 @@ public:
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
 	void OnAllOrdersComplete();
 
-	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
-	void OnCountdownStart(float Duration, float Rate);
-	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
-	void OnCountdownEnd();
-
 	// Calender Subsystem methods
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
 	void StartDay();
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
-	void FinishDay(bool HasReached);
+	void FinishDay();
 
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
 	void OnWeekComplete();
 
 	// Interface methods
 	virtual void RequestForOrders_Implementation() override;
+	virtual void OnPlayerArrival_Implementation(EPlayerArrivalStatus Status) override;
 
 	// Private Methods
 	UFUNCTION(BlueprintCallable, BlueprintPure)
