@@ -4,11 +4,15 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/GameModeBase.h"
+#include "HelperClasses/EnumClass.h"
 #include "HelperClasses/StructClass.h"
 #include "Interfaces/PizzaModeInterface.h"
+#include "Subsystems/ResourceSubsystem.h"
 #include "GameLevelMode.generated.h"
 
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnMoneyStateUpdatedSignature, int, CurrentMoney);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnPlayerOnArrivedAtTheShopSignature, EPlayerArrivalStatus, Status);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnDecisionMade, EGameDecision, Decision);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnStrikesUpdated, int, Strikes);
 
 UCLASS()
 class GROUPPROJ27_API AGameLevelMode : public AGameModeBase, public IPizzaModeInterface
@@ -17,58 +21,66 @@ class GROUPPROJ27_API AGameLevelMode : public AGameModeBase, public IPizzaModeIn
 
 private:
 
+	UPROPERTY()
+	int CurrentStrikes = 0;
+	
 public:
-	UPROPERTY(EditDefaultsOnly)
+	UPROPERTY(EditDefaultsOnly, Category = "Private")
 	int mCountdownDuration;
-	UPROPERTY(EditDefaultsOnly)
+	UPROPERTY(EditDefaultsOnly, Category = "Private")
 	float mRate;
-	UPROPERTY(EditDefaultsOnly)
+	UPROPERTY(EditDefaultsOnly, Category = "Private")
 	int ResourceToAdd;
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Private")
+	int TargetResourceThreshold = 1000;
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Private")
+	int TotalStrikes;
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Private")
+	int mStartingBalance;
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Private")
+	bool bHasReached;
+
+
+	UPROPERTY(BlueprintAssignable, BlueprintCallable)
+	FOnPlayerOnArrivedAtTheShopSignature OnPlayerArrivedAtTheShop;
+	UPROPERTY(BlueprintAssignable, BlueprintCallable)
+	FOnDecisionMade OnDecisionMade;
+	UPROPERTY(BlueprintAssignable, BlueprintCallable)
+	FOnStrikesUpdated OnStrikesUpdated;
+	
 	UPROPERTY(BlueprintReadWrite)
 	class UPizzaSubsystem* PizzaSubsystem;
-	UPROPERTY(BlueprintReadWrite)
-	class UTimerSubsystem* TimerSubsystem;
 	UPROPERTY(BlueprintReadWrite)
 	class UCalenderSubsystem* CalenderSubsystem;
 	UPROPERTY(BlueprintReadWrite)
 	class UResourceSubsystem* ResourceSubsystem;
 
-	UPROPERTY(BlueprintAssignable, BlueprintCallable)
-	FOnMoneyStateUpdatedSignature OnMoneyStateUpdated;
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
-	int TargetResourceThreshold = 1000;
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
-	int TotalStrikes;
-
 	virtual void OnPostLogin(AController* NewPlayer) override;
 
 	// Pizza Subsystem methods
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
-	void OnAllOrdersComplete();
-	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
 	void OnReadyToTakeOrder();
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
 	void OnOrderComplete(int CustomerID, FPizzaStruct OrderSummary);
-
-	// Timer Subsystem methods
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
-	void OnCountdownStart(float Duration, float Rate);
-	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
-	void OnCountdownEnd();
+	void OnAllOrdersComplete();
 
 	// Calender Subsystem methods
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
 	void StartDay();
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
-	void FinishDay(bool HasReached);
+	void FinishDay();
+
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
+	void OnWeekComplete();
 
 	// Interface methods
 	virtual void RequestForOrders_Implementation() override;
+	virtual void OnPlayerArrival_Implementation(EPlayerArrivalStatus Status) override;
 
 	// Private Methods
-	UFUNCTION(BlueprintCallable)
-	void UpdateCalender();
-
+	UFUNCTION(BlueprintCallable, BlueprintPure)
+	bool HasEnoughBalanceToPayRent() {return ResourceSubsystem->GetCurrentBalance() > TargetResourceThreshold; }
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
 	void MakeDecisionBasedOnMoney(int CurrentBalance);
 };

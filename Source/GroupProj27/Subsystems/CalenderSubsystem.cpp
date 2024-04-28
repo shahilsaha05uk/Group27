@@ -10,30 +10,47 @@ void UCalenderSubsystem::TriggerCalenderUpdate() const
 
 void UCalenderSubsystem::Deinitialize()
 {
+	OnCalenderUpdated.Clear();
+	OnDayStarted.Clear();
+	OnDayComplete.Clear();
+	OnStartCountdown.Clear();
+	OnFinishCountdown.Clear();
 	Super::Deinitialize();
+}
+
+void UCalenderSubsystem::UpdateCalender()
+{
+	if(CurrentDay >=5)	// if the Current Day is >=5
+	{
+		CurrentWeek++;
+		CurrentDay = 1;
+		OnWeekComplete.Broadcast();
+	}
+	else
+	{
+		CurrentDay++;
+	}
+	OnCalenderUpdated.Broadcast(CurrentWeek, CurrentDay);
 }
 
 void UCalenderSubsystem::StartDay()
 {
+	UpdateCalender();
+	OnFinishCountdown.Broadcast();
 	OnDayStarted.Broadcast();
-	TriggerCalenderUpdate();
 }
 
-void UCalenderSubsystem::UpdateDay()
+void UCalenderSubsystem::EndDay()
 {
-	CurrentDay++;
-	TriggerCalenderUpdate();
+	OnDayComplete.Broadcast();
 }
 
-void UCalenderSubsystem::UpdateWeek()
+void UCalenderSubsystem::StartCountdown(float Duration, float rate)
 {
-	CurrentWeek++;
-	TriggerCalenderUpdate();
+	OnStartCountdown.Broadcast(Duration, rate);
 }
 
-void UCalenderSubsystem::ResetDays()
+void UCalenderSubsystem::EndCountdown()
 {
-	CurrentDay = DefaultDay;
-	TriggerCalenderUpdate();
+	OnFinishCountdown.Broadcast();
 }
-

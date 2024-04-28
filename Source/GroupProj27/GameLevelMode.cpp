@@ -6,38 +6,33 @@
 #include "Subsystems/CalenderSubsystem.h"
 #include "Subsystems/PizzaSubsystem.h"
 #include "Subsystems/ResourceSubsystem.h"
-#include "Subsystems/TimerSubsystem.h"
 
 
 void AGameLevelMode::OnPostLogin(AController* NewPlayer)
 {
 	Super::OnPostLogin(NewPlayer);
+	bHasReached = false;
 
 	const auto Instance = GetGameInstance();
 	PizzaSubsystem = Instance->GetSubsystem<UPizzaSubsystem>();
-	TimerSubsystem = Instance->GetSubsystem<UTimerSubsystem>();
 	CalenderSubsystem = Instance->GetSubsystem<UCalenderSubsystem>();
 	ResourceSubsystem = Instance->GetSubsystem<UResourceSubsystem>();
-	
 	if(PizzaSubsystem)
 	{
 		PizzaSubsystem->OnReadyToTakeOrder.AddDynamic(this, &ThisClass::OnReadyToTakeOrder);
 		PizzaSubsystem->OnOrderComplete.AddDynamic(this, &ThisClass::OnOrderComplete);
 		PizzaSubsystem->OnAllOrdersComplete.AddDynamic(this, &ThisClass::OnAllOrdersComplete);
 	}
-	if(TimerSubsystem)
-	{
-		TimerSubsystem->OnStartCountdown.AddDynamic(this, &ThisClass::OnCountdownStart);
-		TimerSubsystem->OnFinishCountdown.AddDynamic(this, &ThisClass::OnCountdownEnd);
-	}
 	if(CalenderSubsystem)
 	{
 		CalenderSubsystem->OnDayStarted.AddDynamic(this, &ThisClass::StartDay);
 		CalenderSubsystem->OnDayComplete.AddDynamic(this, &ThisClass::FinishDay);
+		CalenderSubsystem->OnWeekComplete.AddDynamic(this, &ThisClass::OnWeekComplete);
 	}
-	if(!ResourceSubsystem)
+	if(ResourceSubsystem)
 	{
-		UE_LOG(LogTemp, Error, TEXT("Resource Subsystem couldnt be initialised"));
+		// Adds the starting balance to the current balamce
+		ResourceSubsystem->AddBalance(mStartingBalance);
 	}
 }
 
@@ -46,39 +41,30 @@ void AGameLevelMode::RequestForOrders_Implementation()
 	
 }
 
-
-#pragma region Private methods
-void AGameLevelMode::UpdateCalender()
-{
-	if(CalenderSubsystem)
-	{
-		if(CalenderSubsystem->GetCurrentDay() ==5)
-		{
-			CalenderSubsystem->UpdateWeek();
-			CalenderSubsystem->ResetDays();
-		}
-		else
-		{
-			CalenderSubsystem->UpdateDay();
-		}
-	}
-}
-#pragma endregion
-
 #pragma region Calender Bind methods
 
 void AGameLevelMode::StartDay_Implementation()
 {
-	UpdateCalender();
+	if(CalenderSubsystem) CalenderSubsystem->OnFinishCountdown.Broadcast();
+	OnStrikesUpdated.Broadcast(CurrentStrikes);
 	Execute_RequestForOrders(this);
 }
 
-void AGameLevelMode::FinishDay_Implementation(bool HasReached)
+void AGameLevelMode::FinishDay_Implementation()
 {
-	if(HasReached)
+	
+}
+
+void AGameLevelMode::OnWeekComplete_Implementation()
+{
+	if(!HasEnoughBalanceToPayRent())	// if the balance is not enough to pay the rent
 	{
-		TimerSubsystem->OnFinishCountdown.Broadcast();
+		OnStrikesUpdated.Broadcast(CurrentStrikes++);
+		const auto decision = (CurrentStrikes >= TotalStrikes)? LOSE: CONTINUE;
+		OnDecisionMade.Broadcast(decision);
+		return;
 	}
+	OnDecisionMade.Broadcast(WIN);
 }
 
 #pragma endregion
@@ -87,33 +73,24 @@ void AGameLevelMode::FinishDay_Implementation(bool HasReached)
 
 void AGameLevelMode::OnReadyToTakeOrder_Implementation()
 {
-	StartDay();
+	
 }
 
 void AGameLevelMode::OnOrderComplete_Implementation(int CustomerID, FPizzaStruct OrderSummary)
 {
-	ResourceSubsystem->AddBalance(ResourceToAdd);
+	auto balance = ResourceSubsystem->AddBalance(ResourceToAdd);
+	
+	//Check the current balance to see if the they can pay the rent
+	const auto decision = (balance > TargetResourceThreshold)? WIN: CONTINUE;
+	OnDecisionMade.Broadcast(decision);
 }
 
 void AGameLevelMode::OnAllOrdersComplete_Implementation()
 {
-	if(TimerSubsystem)
+	if(CalenderSubsystem)
 	{
-		TimerSubsystem->OnStartCountdown.Broadcast(mCountdownDuration, mRate);
+		CalenderSubsystem->StartCountdown(mCountdownDuration, mRate);
 	}
-}
-
-#pragma endregion
-
-#pragma region TimerSubsystem
-
-void AGameLevelMode::OnCountdownStart_Implementation(float Duration, float Rate)
-{
-}
-
-void AGameLevelMode::OnCountdownEnd_Implementation()
-{
-	//FinishDay(bHasReachedShop);
 }
 
 #pragma endregion
@@ -123,6 +100,34 @@ void AGameLevelMode::OnCountdownEnd_Implementation()
 void AGameLevelMode::MakeDecisionBasedOnMoney_Implementation(int CurrentBalance)
 {
 	
+}
+
+void AGameLevelMode::OnPlayerArrival_Implementation(EPlayerArrivalStatus Status)
+{
+	//OnPlayerArrivedAtTheShop.Broadcast(HasReachedShop);
+
+	switch (Status)
+	{
+	case ARRIVED:
+		CalenderSubsystem->EndCountdown();
+		if (PizzaSubsystem->CanTakeOrders())
+		{
+			CalenderSubsystem->StartDay();
+		}
+		break;
+	case YET_TO_ARRIVE:
+		break;
+	case LATE:
+		if (PizzaSubsystem->CanTakeOrders())
+		{
+			//TODO: Needs to be looked at
+			//CalenderSubsystem->StartDay();
+		}
+		break;
+	default:
+		break;
+	}
+	OnPlayerArrivedAtTheShop.Broadcast(Status);
 }
 
 #pragma endregion
