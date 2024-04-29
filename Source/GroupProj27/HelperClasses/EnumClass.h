@@ -16,7 +16,10 @@ UENUM(BlueprintType)
 enum EGameDecision { LOSE, WIN, CONTINUE };
 
 UENUM(BlueprintType)
-enum EPlayerArrivalStatus { ARRIVED, YET_TO_ARRIVE, LATE};
+enum EPlayerArrivalStatus {
+	NOSTATUS,
+	ARRIVED,
+	LATE};
 
 UENUM(BlueprintType)
 enum ECountdownStatus

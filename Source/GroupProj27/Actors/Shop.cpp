@@ -26,6 +26,7 @@ void AShop::BeginPlay()
 		mCalenderSubsystem->OnDayStarted.AddDynamic(this, &ThisClass::OnDayStarted);
 		mCalenderSubsystem->OnFinishCountdown.AddDynamic(this, &ThisClass::OnCountdownFinished);
 	}
+	
 	ToggleShop(true);
 }
 
@@ -39,16 +40,29 @@ void AShop::ToggleShop_Implementation(bool Activate)
 void AShop::PlayerArrived()
 {
 	bHasPlayerArrived = true;
-	AGameLevelMode* gMode = Cast<AGameLevelMode>(GetWorld()->GetAuthGameMode());
-	if (gMode)
+	if(const auto gMode = GetWorld()->GetAuthGameMode())
 	{
-		IPizzaModeInterface::Execute_OnPlayerArrival(gMode, EPlayerArrivalStatus::ARRIVED);
+		if(UKismetSystemLibrary::DoesImplementInterface(gMode, UPizzaModeInterface::StaticClass()))
+		{
+			IPizzaModeInterface::Execute_OnPlayerStatusUpdated(gMode, ARRIVED);
+		}
 	}
 }
 
 void AShop::PlayerLeft()
 {
 	bHasPlayerArrived = false;
+}
+
+#pragma endregion
+
+#pragma region Pizza Subsystem Binded methods
+
+void AShop::OnAllOrdersComplete()
+{
+	ToggleShop(true);
+	bCountdownActivated = true;
+	if(mCalenderSubsystem) mCalenderSubsystem->StartCountdown(mCountdownDuration, mRate);
 }
 
 #pragma endregion
@@ -64,29 +78,17 @@ void AShop::OnCountdownFinished()
 {
 	bCountdownActivated = false;
 
-	if (!bHasPlayerArrived && !bCountdownActivated)
+	if(!bHasPlayerArrived && !bCountdownActivated)	// if player hasnt arrived to the shop... means they are late
 	{
-		AGameLevelMode* gMode = Cast<AGameLevelMode>(GetWorld()->GetAuthGameMode());
-		if (gMode)
+		if(const auto gMode = GetWorld()->GetAuthGameMode())
 		{
-			IPizzaModeInterface::Execute_OnPlayerArrival(gMode, EPlayerArrivalStatus::LATE);
+			if(UKismetSystemLibrary::DoesImplementInterface(gMode, UPizzaModeInterface::StaticClass()))
+			{
+				IPizzaModeInterface::Execute_OnPlayerStatusUpdated(gMode, LATE);
+				ToggleShop(true);
+			}
 		}
 	}
 }
 
 #pragma endregion
-
-#pragma region Pizza Subsystem Binded methods
-
-void AShop::OnAllOrdersComplete()
-{
-	ToggleShop(true);
-	bCountdownActivated = true;
-	mCalenderSubsystem->StartCountdown(mCountdownDuration, mRate);
-}
-
-#pragma endregion
-
-
-
-

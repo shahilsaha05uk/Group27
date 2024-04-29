@@ -9,8 +9,7 @@
 #include "Interfaces/PizzaModeInterface.h"
 #include "Subsystems/ResourceSubsystem.h"
 #include "GameLevelMode.generated.h"
-
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnPlayerOnArrivedAtTheShopSignature, EPlayerArrivalStatus, Status);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnPlayerStatusUpdateSignature, EPlayerArrivalStatus, PlayerStatus);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnDecisionMade, EGameDecision, Decision);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnStrikesUpdated, int, Strikes);
 
@@ -42,7 +41,7 @@ public:
 
 
 	UPROPERTY(BlueprintAssignable, BlueprintCallable)
-	FOnPlayerOnArrivedAtTheShopSignature OnPlayerArrivedAtTheShop;
+	FOnPlayerStatusUpdateSignature OnPlayerStatusUpdate;
 	UPROPERTY(BlueprintAssignable, BlueprintCallable)
 	FOnDecisionMade OnDecisionMade;
 	UPROPERTY(BlueprintAssignable, BlueprintCallable)
@@ -59,29 +58,20 @@ public:
 
 	// Pizza Subsystem methods
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
-	void OnReadyToTakeOrder();
-	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
 	void OnOrderComplete(int CustomerID, FPizzaStruct OrderSummary);
-	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
-	void OnAllOrdersComplete();
 
 	// Calender Subsystem methods
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
-	void StartDay();
-	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
-	void FinishDay();
+	void OnDayStart();
 
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
 	void OnWeekComplete();
 
 	// Interface methods
 	virtual void RequestForOrders_Implementation() override;
-	virtual void OnPlayerArrival_Implementation(EPlayerArrivalStatus Status) override;
-
+	virtual void OnPlayerStatusUpdated_Implementation(EPlayerArrivalStatus PlayerStatus) override;
 	// Private Methods
 	UFUNCTION(BlueprintCallable, BlueprintPure)
 	bool HasEnoughBalanceToPayRent() {return ResourceSubsystem->GetCurrentBalance() > TargetResourceThreshold; }
-	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
-	void MakeDecisionBasedOnMoney(int CurrentBalance);
 };
 

@@ -15,8 +15,6 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnWeekCompleteSignature);
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FStartCountdownTimerSignature, float, Duration, float, rate);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FFinishedCountdownTimerSignature);
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnCountdownStatusUpdateSignature, ECountdownStatus, Status);
-
 
 UCLASS()
 class GROUPPROJ27_API UCalenderSubsystem : public UGameInstanceSubsystem
@@ -40,9 +38,6 @@ public:
 
 	UPROPERTY(BlueprintAssignable, BlueprintCallable)
 	FStartCountdownTimerSignature OnStartCountdown;
-	
-	UPROPERTY(BlueprintAssignable, BlueprintCallable)
-	FOnCountdownStatusUpdateSignature OnCountdownUpdate;
 	UPROPERTY(BlueprintAssignable, BlueprintCallable)
 	FFinishedCountdownTimerSignature OnFinishCountdown;
 	
@@ -60,11 +55,9 @@ public:
 	void UpdateCalender();
 	UFUNCTION(BlueprintCallable)
 	void StartDay();
-	UFUNCTION(BlueprintCallable)
-	void EndDay();
 
 	UFUNCTION(BlueprintCallable)
 	void StartCountdown(float Duration, float rate);
 	UFUNCTION(BlueprintCallable)
-	void EndCountdown();
+	void FinishCountdown();
 };
