@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "UObject/Interface.h"
+#include "GroupProj27/HelperClasses/EnumClass.h"
 #include "PizzaModeInterface.generated.h"
 
 // This class does not need to be modified.
@@ -23,6 +24,8 @@ class GROUPPROJ27_API IPizzaModeInterface
 	// Add interface functions to this class. This is the class that will be inherited to implement this interface.
 public:
 
+	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
+	void OnPlayerStatusUpdated(EPlayerArrivalStatus PlayerStatus);
 	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
 	void RequestForOrders();
 };

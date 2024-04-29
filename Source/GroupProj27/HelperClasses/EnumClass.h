@@ -15,6 +15,19 @@ enum EWidgetType
 UENUM(BlueprintType)
 enum EGameDecision { LOSE, WIN, CONTINUE };
 
+UENUM(BlueprintType)
+enum EPlayerArrivalStatus {
+	NOSTATUS,
+	ARRIVED,
+	LATE};
+
+UENUM(BlueprintType)
+enum ECountdownStatus
+{
+	STARTED, FINISHED
+};
+
+
 UCLASS()
 class GROUPPROJ27_API UEnumClass : public UBlueprintFunctionLibrary
 {

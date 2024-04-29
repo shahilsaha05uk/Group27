@@ -3,30 +3,49 @@
 
 #include "CalenderSubsystem.h"
 
+void UCalenderSubsystem::TriggerCalenderUpdate() const
+{
+	OnCalenderUpdated.Broadcast(CurrentWeek, CurrentDay);
+}
+
 void UCalenderSubsystem::Deinitialize()
 {
-	OnWeekUpdated.Clear();
+	OnCalenderUpdated.Clear();
 	OnDayStarted.Clear();
+	OnDayComplete.Clear();
+	OnStartCountdown.Clear();
+	OnFinishCountdown.Clear();
 	Super::Deinitialize();
+}
+
+void UCalenderSubsystem::UpdateCalender()
+{
+	if(CurrentDay >=5)	// if the Current Day is >=5
+	{
+		CurrentWeek++;
+		CurrentDay = 1;
+		OnWeekComplete.Broadcast();
+	}
+	else
+	{
+		CurrentDay++;
+	}
+	OnCalenderUpdated.Broadcast(CurrentWeek, CurrentDay);
 }
 
 void UCalenderSubsystem::StartDay()
 {
-	OnDayStarted.Broadcast();
+	OnDayComplete.Broadcast();	//Complete the Current Day
+	UpdateCalender();	// Update the Calender
+	OnDayStarted.Broadcast();	// Trigger the new day
 }
 
-void UCalenderSubsystem::UpdateDay()
+void UCalenderSubsystem::StartCountdown(float Duration, float rate)
 {
-	CurrentDay++;
+	if(OnStartCountdown.IsBound()) OnStartCountdown.Broadcast(Duration, rate);
 }
 
-void UCalenderSubsystem::UpdateWeek()
+void UCalenderSubsystem::FinishCountdown()
 {
-	CurrentWeek++;
+	if(OnFinishCountdown.IsBound())	OnFinishCountdown.Broadcast();	// finish the countdown if there is any
 }
-
-void UCalenderSubsystem::ResetDays()
-{
-	CurrentDay = DefaultDay;
-}
-

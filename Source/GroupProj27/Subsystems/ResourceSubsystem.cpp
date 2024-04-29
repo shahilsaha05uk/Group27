@@ -6,14 +6,16 @@ void UResourceSubsystem::Deinitialize()
 	Super::Deinitialize();
 }
 
-void UResourceSubsystem::AddBalance(int increaseBy)
+int UResourceSubsystem::AddBalance(int increaseBy)
 {
 	mCurrentResource += increaseBy;
 	OnBalanceUpdate.Broadcast(mCurrentResource);
+	return mCurrentResource;
 }
 
-void UResourceSubsystem::DeductBalance(int decreaseBy)
+int UResourceSubsystem::DeductBalance(int decreaseBy)
 {
 	mCurrentResource -= decreaseBy;
 	OnBalanceUpdate.Broadcast(mCurrentResource);
+	return mCurrentResource;
 }

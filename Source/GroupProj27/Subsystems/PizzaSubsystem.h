@@ -4,17 +4,19 @@
 
 #include "CoreMinimal.h"
 #include "GroupProj27/HelperClasses/StructClass.h"
-#include "Subsystems/WorldSubsystem.h"
+#include "Subsystems/GameInstanceSubsystem.h"
 #include "PizzaSubsystem.generated.h"
 
+
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnReadyToTakeOrderSignature);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnQualityUpdatedSignature);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnAllOrdersCompleteSignature);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnOrderCreateSignature, int, CustomerID);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnOrderInitialisedSignature);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnOrderCompleteSignature, int, CustomerID, FPizzaStruct, OrderSummary);
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FProduceOrderSummarySignature, FPizzaStruct, Summary);
 
 UCLASS()
-class GROUPPROJ27_API UPizzaSubsystem : public UWorldSubsystem
+class GROUPPROJ27_API UPizzaSubsystem : public UGameInstanceSubsystem
 {
 	GENERATED_BODY()
 
@@ -31,11 +33,13 @@ public:
 	virtual void Deinitialize() override;
 	
 	UPROPERTY(BlueprintAssignable, BlueprintCallable)
+	FOnReadyToTakeOrderSignature OnReadyToTakeOrder;
+	UPROPERTY(BlueprintAssignable, BlueprintCallable)
 	FOnAllOrdersCompleteSignature OnAllOrdersComplete;
 	UPROPERTY(BlueprintAssignable, BlueprintCallable)
-	FProduceOrderSummarySignature OnProduceOrderSummary;
-	UPROPERTY(BlueprintAssignable, BlueprintCallable)
 	FOnOrderCreateSignature OnOrderCreated;
+	UPROPERTY(BlueprintAssignable, BlueprintCallable)
+	FOnOrderInitialisedSignature OnOrderInitialised;
 	UPROPERTY(BlueprintAssignable, BlueprintCallable)
 	FOnOrderCompleteSignature OnOrderComplete;
 
@@ -48,14 +52,12 @@ public:
 	// Customer Management
 	UFUNCTION(BlueprintCallable)
 	void AddCustomers(TMap<int, class ACustomerMarker*> CustomerMap);
-	UFUNCTION(BlueprintCallable)
-	void AddCustomer(int ID, class ACustomerMarker* Customer);
-	UFUNCTION(BlueprintCallable)
-	bool RemoveCustomer(int ID);
 
 	// Order Management
 	UFUNCTION(BlueprintCallable)
 	bool CreateOrder(int CustomerID, FPizzaStruct order);
+	UFUNCTION(BlueprintCallable)
+	void InitialiseOrder();
 	UFUNCTION(BlueprintCallable)
 	bool OrderComplete(int CustomerID);
 
@@ -63,7 +65,7 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void StartQualityTimer(float rate, int qualityDecreaseRate, bool bLoop);
 	UFUNCTION(BlueprintCallable)
-	void StopQualityTimer();
+	void FinishedQualityTimer();
 	UFUNCTION(BlueprintCallable)
 	void UpdateQuality();
 
@@ -75,5 +77,7 @@ public:
 
 	// Debugs ONLY
 	UFUNCTION(BlueprintCallable, BlueprintPure)
-	class ACustomerMarker* GetCustomer(int ID);
+	ACustomerMarker* GetCustomer(int ID);
+	UFUNCTION(BlueprintCallable, BlueprintPure)
+	TMap<int, FPizzaStruct> GetOrders() {return Orders;}
 };
