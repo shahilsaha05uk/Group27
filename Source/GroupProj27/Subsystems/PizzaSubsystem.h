@@ -12,6 +12,7 @@ DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnReadyToTakeOrderSignature);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnQualityUpdatedSignature);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnAllOrdersCompleteSignature);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnOrderCreateSignature, int, CustomerID);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnOrderInitialisedSignature);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnOrderCompleteSignature, int, CustomerID, FPizzaStruct, OrderSummary);
 
 UCLASS()
@@ -38,6 +39,8 @@ public:
 	UPROPERTY(BlueprintAssignable, BlueprintCallable)
 	FOnOrderCreateSignature OnOrderCreated;
 	UPROPERTY(BlueprintAssignable, BlueprintCallable)
+	FOnOrderInitialisedSignature OnOrderInitialised;
+	UPROPERTY(BlueprintAssignable, BlueprintCallable)
 	FOnOrderCompleteSignature OnOrderComplete;
 
 	UPROPERTY(BlueprintAssignable, BlueprintCallable)
@@ -53,6 +56,8 @@ public:
 	// Order Management
 	UFUNCTION(BlueprintCallable)
 	bool CreateOrder(int CustomerID, FPizzaStruct order);
+	UFUNCTION(BlueprintCallable)
+	void InitialiseOrder();
 	UFUNCTION(BlueprintCallable)
 	bool OrderComplete(int CustomerID);
 
@@ -72,5 +77,7 @@ public:
 
 	// Debugs ONLY
 	UFUNCTION(BlueprintCallable, BlueprintPure)
-	class ACustomerMarker* GetCustomer(int ID);
+	ACustomerMarker* GetCustomer(int ID);
+	UFUNCTION(BlueprintCallable, BlueprintPure)
+	TMap<int, FPizzaStruct> GetOrders() {return Orders;}
 };
