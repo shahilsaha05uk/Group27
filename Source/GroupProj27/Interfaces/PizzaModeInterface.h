@@ -25,7 +25,7 @@ class GROUPPROJ27_API IPizzaModeInterface
 public:
 
 	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
-	void OnPlayerArrival(enum EPlayerArrivalStatus Status);
+	void OnPlayerStatusUpdated(EPlayerArrivalStatus PlayerStatus);
 	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
 	void RequestForOrders();
 };

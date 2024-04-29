@@ -19,14 +19,11 @@ void AGameLevelMode::OnPostLogin(AController* NewPlayer)
 	ResourceSubsystem = Instance->GetSubsystem<UResourceSubsystem>();
 	if(PizzaSubsystem)
 	{
-		PizzaSubsystem->OnReadyToTakeOrder.AddDynamic(this, &ThisClass::OnReadyToTakeOrder);
 		PizzaSubsystem->OnOrderComplete.AddDynamic(this, &ThisClass::OnOrderComplete);
-		PizzaSubsystem->OnAllOrdersComplete.AddDynamic(this, &ThisClass::OnAllOrdersComplete);
 	}
 	if(CalenderSubsystem)
 	{
-		CalenderSubsystem->OnDayStarted.AddDynamic(this, &ThisClass::StartDay);
-		CalenderSubsystem->OnDayComplete.AddDynamic(this, &ThisClass::FinishDay);
+		CalenderSubsystem->OnDayStarted.AddDynamic(this, &ThisClass::OnDayStart);
 		CalenderSubsystem->OnWeekComplete.AddDynamic(this, &ThisClass::OnWeekComplete);
 	}
 	if(ResourceSubsystem)
@@ -36,23 +33,12 @@ void AGameLevelMode::OnPostLogin(AController* NewPlayer)
 	}
 }
 
-void AGameLevelMode::RequestForOrders_Implementation()
-{
-	
-}
-
 #pragma region Calender Bind methods
 
-void AGameLevelMode::StartDay_Implementation()
+void AGameLevelMode::OnDayStart_Implementation()
 {
-	if(CalenderSubsystem) CalenderSubsystem->OnFinishCountdown.Broadcast();
 	OnStrikesUpdated.Broadcast(CurrentStrikes);
 	Execute_RequestForOrders(this);
-}
-
-void AGameLevelMode::FinishDay_Implementation()
-{
-	
 }
 
 void AGameLevelMode::OnWeekComplete_Implementation()
@@ -71,11 +57,6 @@ void AGameLevelMode::OnWeekComplete_Implementation()
 
 #pragma region PizzaSubsystem Bind Methods
 
-void AGameLevelMode::OnReadyToTakeOrder_Implementation()
-{
-	
-}
-
 void AGameLevelMode::OnOrderComplete_Implementation(int CustomerID, FPizzaStruct OrderSummary)
 {
 	auto balance = ResourceSubsystem->AddBalance(ResourceToAdd);
@@ -85,49 +66,24 @@ void AGameLevelMode::OnOrderComplete_Implementation(int CustomerID, FPizzaStruct
 	OnDecisionMade.Broadcast(decision);
 }
 
-void AGameLevelMode::OnAllOrdersComplete_Implementation()
-{
-	if(CalenderSubsystem)
-	{
-		CalenderSubsystem->StartCountdown(mCountdownDuration, mRate);
-	}
-}
-
 #pragma endregion
 
 #pragma region Interface Methods
 
-void AGameLevelMode::MakeDecisionBasedOnMoney_Implementation(int CurrentBalance)
+void AGameLevelMode::RequestForOrders_Implementation()
 {
-	
 }
 
-void AGameLevelMode::OnPlayerArrival_Implementation(EPlayerArrivalStatus Status)
+void AGameLevelMode::OnPlayerStatusUpdated_Implementation(const EPlayerArrivalStatus PlayerStatus)
 {
-	//OnPlayerArrivedAtTheShop.Broadcast(HasReachedShop);
+	if(PlayerStatus == NULL) return;
+	OnPlayerStatusUpdate.Broadcast(PlayerStatus);
 
-	switch (Status)
-	{
-	case ARRIVED:
-		CalenderSubsystem->EndCountdown();
-		if (PizzaSubsystem->CanTakeOrders())
-		{
-			CalenderSubsystem->StartDay();
-		}
-		break;
-	case YET_TO_ARRIVE:
-		break;
-	case LATE:
-		if (PizzaSubsystem->CanTakeOrders())
-		{
-			//TODO: Needs to be looked at
-			//CalenderSubsystem->StartDay();
-		}
-		break;
-	default:
-		break;
+	CalenderSubsystem->FinishCountdown();
+
+	if(PizzaSubsystem->CanTakeOrders()){
+		CalenderSubsystem->StartDay();
 	}
-	OnPlayerArrivedAtTheShop.Broadcast(Status);
 }
 
 #pragma endregion

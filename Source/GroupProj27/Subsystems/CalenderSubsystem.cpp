@@ -35,22 +35,17 @@ void UCalenderSubsystem::UpdateCalender()
 
 void UCalenderSubsystem::StartDay()
 {
-	UpdateCalender();
-	OnFinishCountdown.Broadcast();
-	OnDayStarted.Broadcast();
-}
-
-void UCalenderSubsystem::EndDay()
-{
-	OnDayComplete.Broadcast();
+	OnDayComplete.Broadcast();	//Complete the Current Day
+	UpdateCalender();	// Update the Calender
+	OnDayStarted.Broadcast();	// Trigger the new day
 }
 
 void UCalenderSubsystem::StartCountdown(float Duration, float rate)
 {
-	OnStartCountdown.Broadcast(Duration, rate);
+	if(OnStartCountdown.IsBound()) OnStartCountdown.Broadcast(Duration, rate);
 }
 
-void UCalenderSubsystem::EndCountdown()
+void UCalenderSubsystem::FinishCountdown()
 {
-	OnFinishCountdown.Broadcast();
+	if(OnFinishCountdown.IsBound())	OnFinishCountdown.Broadcast();	// finish the countdown if there is any
 }
