@@ -23,15 +23,27 @@ AParkourPlayer::AParkourPlayer()
 
 	mCameraComponent = CreateDefaultSubobject<UCameraComponent>("Camera");
 	mCameraComponent->SetupAttachment(mCameraHandlerComponent);
+
 }
 
+void AParkourPlayer::OnPlayerOverlapBegin_Implementation(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
+	UPrimitiveComponent* OtherComp, int OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
+{
+}
+
+void AParkourPlayer::OnPlayerOverlapEnd_Implementation(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
+	UPrimitiveComponent* OtherComp, int OtherBodyIndex)
+{
+}
 
 void AParkourPlayer::BeginPlay()
 {
 	// Do the bindings
 	mLedgeColliderComponent->OnComponentBeginOverlap.AddDynamic(this, &AParkourPlayer::OnPlatformCollisionBegin);
 	mLedgeColliderComponent->OnComponentEndOverlap.AddDynamic(this, &AParkourPlayer::OnPlatformCollisionEnd);
-	
+	GetCapsuleComponent()->OnComponentBeginOverlap.AddDynamic(this, &ThisClass::OnPlayerOverlapBegin);
+	GetCapsuleComponent()->OnComponentEndOverlap.AddDynamic(this, &ThisClass::OnPlayerOverlapEnd);
+
 	mDefaultWalkSpeed = GetCharacterMovement()->MaxWalkSpeed;
 	Super::BeginPlay();
 }
@@ -101,6 +113,11 @@ FVector AParkourPlayer::GetCameraLookAt_Implementation()
 }
 
 void AParkourPlayer::ReachedDestination_Implementation(int ID)
+{
+	
+}
+
+void AParkourPlayer::OnOrdersRequested_Implementation()
 {
 	
 }

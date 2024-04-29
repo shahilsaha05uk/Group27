@@ -36,6 +36,11 @@ public:
 	AParkourPlayer();
 
 	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
+	void OnPlayerOverlapBegin(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
+	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
+	void OnPlayerOverlapEnd(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int OtherBodyIndex);
+
+	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
 	void OnPlatformCollisionBegin(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
 	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
 	void OnPlatformCollisionEnd(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int OtherBodyIndex);
@@ -45,6 +50,7 @@ public:
 	// IParkourPlayerInterface interface methods
 	virtual FVector GetCameraLookAt_Implementation() override;
 	virtual void ReachedDestination_Implementation(int ID) override;
+	virtual void OnOrdersRequested_Implementation() override;
 
 	virtual void Hang_Implementation(bool isLedgeDetected) override;
 	virtual void StopHamg_Implementation() override;

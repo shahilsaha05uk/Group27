@@ -4,12 +4,16 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
-#include "Shop.generated.h"
+#include "CustomerManager.generated.h"
 
 UCLASS()
-class GROUPPROJ27_API AShop : public AActor
+class GROUPPROJ27_API ACustomerManager : public AActor
 {
 	GENERATED_BODY()
 
+public:
 
+	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
+	void ToggleCustomer(int ID);
+	
 };
