@@ -21,6 +21,8 @@ public:
 	class UInputMappingContext* mPlayerInputContext;
 
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Privates")
+	class AGameLevelMode* mGameMode;
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Privates")
 	APawn* mPawn;
 
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Camera Settings")

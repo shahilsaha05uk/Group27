@@ -8,6 +8,22 @@
 
 
 USTRUCT(BlueprintType)
+struct FState
+{
+	GENERATED_BODY()
+
+public:
+	
+	UPROPERTY(BlueprintReadWrite)
+	int CurrentBalance;
+	UPROPERTY(BlueprintReadWrite)
+	int CurrentWeek;
+	UPROPERTY(BlueprintReadWrite)
+	int CurrentDay;
+};
+
+
+USTRUCT(BlueprintType)
 struct FBounds
 {
 	GENERATED_BODY()
@@ -59,11 +75,12 @@ struct FPizzaStruct
 	GENERATED_BODY()
 
 public:
-
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
 	class ACustomerMarker* Customer;
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
 	int Quality;
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+	FString Review;
 };
 
 USTRUCT(BlueprintType)
