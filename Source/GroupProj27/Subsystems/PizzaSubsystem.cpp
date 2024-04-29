@@ -35,6 +35,11 @@ bool UPizzaSubsystem::CreateOrder(int CustomerID, FPizzaStruct order)
 	return true;
 }
 
+void UPizzaSubsystem::InitialiseOrder()
+{
+	OnOrderInitialised.Broadcast();
+}
+
 bool UPizzaSubsystem::OrderComplete(int CustomerID)
 {
 	if(!Orders.Contains(CustomerID)) return false;

@@ -76,14 +76,34 @@ void AGameLevelMode::RequestForOrders_Implementation()
 
 void AGameLevelMode::OnPlayerStatusUpdated_Implementation(const EPlayerArrivalStatus PlayerStatus)
 {
-	if(PlayerStatus == NULL) return;
-	OnPlayerStatusUpdate.Broadcast(PlayerStatus);
+	// if the player has arrived than start a new day
 
-	CalenderSubsystem->FinishCountdown();
+	// if the player is late than ONLY CREATE THE ORDERS AND DISPLAY THE VISUALS WHEN THE STATUS IS UPDATED TO ARRIVED
 
-	if(PizzaSubsystem->CanTakeOrders()){
-		CalenderSubsystem->StartDay();
+	switch (PlayerStatus) {
+	case NOSTATUS:
+		break;
+	case ARRIVED:
+		{
+			if(PizzaSubsystem->CanTakeOrders())		// that means that the player is can take orders as they reached on time
+			{
+				CalenderSubsystem->StartDay();
+			}
+			else
+			{
+				OnPlayerIsLate(true);
+			}
+		}
+		break;
+	case LATE:
+		// Take Late Orders
+			OnPlayerIsLate(false);
+		break;
 	}
 }
-
 #pragma endregion
+
+void AGameLevelMode::OnPlayerIsLate_Implementation(bool bHasArrived)
+{
+}
+
