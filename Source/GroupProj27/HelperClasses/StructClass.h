@@ -81,6 +81,8 @@ public:
 	int Quality;
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
 	FString Review;
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+	class UTexture2D* Icon;
 };
 
 USTRUCT(BlueprintType)
