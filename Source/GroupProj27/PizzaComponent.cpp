@@ -5,6 +5,8 @@
 
 #include "Actors/CustomerMarker.h"
 #include "HelperClasses/StructClass.h"
+#include "Kismet/KismetArrayLibrary.h"
+#include "Kismet/KismetSystemLibrary.h"
 #include "Subsystems/CustomerSubsystem.h"
 
 void UPizzaComponent::BeginPlay()
@@ -20,11 +22,12 @@ bool UPizzaComponent::InitiateOrders_Implementation(bool AutoInitialise)
 	return false;
 }
 
+/*
 bool UPizzaComponent::CreateOrder(int CustomerID)
 {
 	if(mCustomerSubsystem->GetOrderList().Contains(CustomerID)) return false;
-	
-	const FActorSpawnParameters params = FActorSpawnParameters();
+
+	auto c = UKismetArrayLibrary::Array_Random(mCustomerSubsystem->GetAllCustomers().
 	if(const auto Customer = mCustomerSubsystem->GetCustomer(CustomerID); Customer != nullptr)
 	{
 		Customer->Init(this, FPizzaStruct({CustomerID, 100, 1, ""}));
@@ -33,7 +36,11 @@ bool UPizzaComponent::CreateOrder(int CustomerID)
 	}
 	return false;
 }
-
+*/
+bool UPizzaComponent::CreateOrder_Implementation(int CustomerID)
+{
+	return false;
+}
 
 #pragma endregion
 
