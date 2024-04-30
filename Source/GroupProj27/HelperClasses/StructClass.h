@@ -76,25 +76,13 @@ struct FPizzaStruct
 
 public:
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
-	int ID;
+	class ACustomerMarker* Customer;
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
 	int Quality;
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
-	int DecreaseRate;
-	UPROPERTY(BlueprintReadWrite, EditAnywhere)
 	FString Review;
-
-	FPizzaStruct(int id, int quality, int dRate, FString review)
-	{
-		ID = id;
-		Quality = quality;
-		DecreaseRate = dRate;
-		Review = review;
-	}
-
-	FPizzaStruct(): ID(0), Quality(0), DecreaseRate(0)
-	{
-	}
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+	class UTexture2D* Icon;
 };
 
 USTRUCT(BlueprintType)
