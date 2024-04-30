@@ -7,7 +7,7 @@
 #include "CustomerSubsystem.generated.h"
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnOrderCollectedSignature, int, ID, int, RemainingOrders);
-
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnOrderInitialisedSignature);
 
 UCLASS()
 class GROUPPROJ27_API UCustomerSubsystem : public UGameInstanceSubsystem
@@ -22,8 +22,10 @@ private:
 	TMap<int, class ACustomerMarker*> Customers;
 
 	UPROPERTY()
-	TMap<int, class APizza*> Orders;
+	TMap<int, class ACustomerMarker*> Orders;
 public:
+	UPROPERTY(BlueprintAssignable, BlueprintCallable)
+	FOnOrderInitialisedSignature OnOrderInitialised;
 	UPROPERTY(BlueprintAssignable)
 	FOnOrderCollectedSignature OnOrderCollected;
 	UFUNCTION(BlueprintCallable)
@@ -46,7 +48,21 @@ public:
 	
 	// Order Mamangement
 	UFUNCTION(BlueprintCallable, BlueprintPure)
-	const TMap<int, class APizza*> &GetOrderList() { return Orders; }
+	const TMap<int, class ACustomerMarker*> &GetOrderList() { return Orders; }
 	UFUNCTION(BlueprintCallable)
-	void UpdateOrders(const TMap<int, class APizza*>& OrderList) { Orders = OrderList; }
+	void AddOrder(int ID, ACustomerMarker* Pizza)
+	{
+		if(Orders.Contains(ID)) return;
+		Orders.Add(ID, Pizza);
+	}
+	UFUNCTION(BlueprintCallable)
+	void UpdateOrders(const TMap<int, class ACustomerMarker*>& OrderList) { Orders = OrderList; }
+	UFUNCTION(BlueprintCallable, BlueprintPure)
+	ACustomerMarker* GetOrderStatus(int CustomerID) {return (Orders.Contains(CustomerID))? Orders[CustomerID]: nullptr;}
+	UFUNCTION(BlueprintCallable, BlueprintPure)
+	bool CanTakeOrders() { return Orders.IsEmpty(); }
+		
+	UFUNCTION(BlueprintCallable)
+	void UpdateCustomersForCollection();
+
 };

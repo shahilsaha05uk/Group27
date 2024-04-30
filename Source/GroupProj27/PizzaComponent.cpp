@@ -3,57 +3,37 @@
 
 #include "PizzaComponent.h"
 
-#include "CustomerManager.h"
-#include "Actors/Pizza.h"
+#include "Actors/CustomerMarker.h"
 #include "HelperClasses/StructClass.h"
 #include "Subsystems/CustomerSubsystem.h"
 
 void UPizzaComponent::BeginPlay()
 {
 	mCustomerSubsystem = GetWorld()->GetGameInstance()->GetSubsystem<UCustomerSubsystem>();
-	if(mCustomerSubsystem)
-	{
-		mCustomerSubsystem->OnOrderCollected.AddDynamic(this, &ThisClass::OrderComplete);
-	}
 	Super::BeginPlay();
 }
 
 #pragma region Order Management
 
-bool UPizzaComponent::InitiateOrders_Implementation()
+bool UPizzaComponent::InitiateOrders_Implementation(bool AutoInitialise)
 {
 	return false;
 }
 
 bool UPizzaComponent::CreateOrder(int CustomerID)
 {
-	if(Orders.Contains(CustomerID)) return false;
+	if(mCustomerSubsystem->GetOrderList().Contains(CustomerID)) return false;
 	
 	const FActorSpawnParameters params = FActorSpawnParameters();
-	if(mCustomerSubsystem->GetCustomer(CustomerID))
+	if(const auto Customer = mCustomerSubsystem->GetCustomer(CustomerID); Customer != nullptr)
 	{
-		// Activate the Customer
-		mCustomerSubsystem->ToggleCustomer(CustomerID, true);
-
-		// Make the Pizza Actor for that Customer
-		const auto pizza = GetWorld()->SpawnActor<APizza>(FVector::Zero(), FRotator::ZeroRotator, params);
-		pizza->Init(this, FPizzaStruct({CustomerID, 100, 1, ""}));
-		Orders.Add(CustomerID, pizza);
+		Customer->Init(this, FPizzaStruct({CustomerID, 100, 1, ""}));
+		mCustomerSubsystem->AddOrder(CustomerID, Customer);
 		return true;
 	}
 	return false;
 }
 
-void UPizzaComponent::OrderComplete_Implementation(int CustomerID, int RemainingOrders)
-{
-	if(!Orders.Contains(CustomerID)) return;
-	Orders.Remove(CustomerID);
-	mCustomerSubsystem->UpdateOrders(Orders);
-	if(Orders.IsEmpty())
-	{
-		StopQualityTimer();
-	}
-}
 
 #pragma endregion
 
@@ -69,6 +49,7 @@ void UPizzaComponent::StopQualityTimer()
 }
 void UPizzaComponent::UpdateQuality()
 {
+	auto &Orders = mCustomerSubsystem->GetOrderList();
 	for (auto& o : Orders)
 	{
 		o.Value->UpdatePizza();

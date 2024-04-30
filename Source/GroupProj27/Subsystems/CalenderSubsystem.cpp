@@ -37,3 +37,8 @@ void UCalenderSubsystem::StartDay()
 	UpdateCalender();	// Update the Calender
 	OnDayStarted.Broadcast();	// Trigger the new day
 }
+
+void UCalenderSubsystem::EndDay()
+{
+	OnDayComplete.Broadcast();	//Complete the Current Day
+}

@@ -28,7 +28,7 @@ private:
 public:
 	UPROPERTY(BlueprintAssignable, BlueprintCallable)
 	FOnCalenderUpdatedSignature OnCalenderUpdated;
-	UPROPERTY(BlueprintAssignable, BlueprintCallable)
+	UPROPERTY(BlueprintAssignable)
 	FOnDayStartedSignature OnDayStarted;
 	UPROPERTY(BlueprintAssignable, BlueprintCallable)
 	FOnDayCompleteSignature OnDayComplete;
@@ -47,4 +47,6 @@ public:
 	void UpdateCalender();
 	UFUNCTION(BlueprintCallable)
 	void StartDay();
+	UFUNCTION(BlueprintCallable)
+	void EndDay();
 };

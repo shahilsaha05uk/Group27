@@ -11,5 +11,6 @@ class GROUPPROJ27_API AShop : public AActor
 {
 	GENERATED_BODY()
 
+public:
 
 };
