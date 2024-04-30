@@ -24,11 +24,7 @@
 			]
 		},
 		{
-			"Name": "Water",
-			"Enabled": true
-		},
-		{
-			"Name": "Landmass",
+			"Name": "HoudiniEngine",
 			"Enabled": true
 		}
 	]

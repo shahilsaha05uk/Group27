@@ -13,8 +13,6 @@ void UCalenderSubsystem::Deinitialize()
 	OnCalenderUpdated.Clear();
 	OnDayStarted.Clear();
 	OnDayComplete.Clear();
-	OnStartCountdown.Clear();
-	OnFinishCountdown.Clear();
 	Super::Deinitialize();
 }
 
@@ -40,12 +38,7 @@ void UCalenderSubsystem::StartDay()
 	OnDayStarted.Broadcast();	// Trigger the new day
 }
 
-void UCalenderSubsystem::StartCountdown(float Duration, float rate)
+void UCalenderSubsystem::EndDay()
 {
-	if(OnStartCountdown.IsBound()) OnStartCountdown.Broadcast(Duration, rate);
-}
-
-void UCalenderSubsystem::FinishCountdown()
-{
-	if(OnFinishCountdown.IsBound())	OnFinishCountdown.Broadcast();	// finish the countdown if there is any
+	OnDayComplete.Broadcast();	//Complete the Current Day
 }
