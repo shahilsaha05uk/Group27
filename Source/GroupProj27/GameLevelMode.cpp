@@ -36,6 +36,8 @@ void AGameLevelMode::OnDayStart_Implementation()
 
 void AGameLevelMode::OnWeekComplete_Implementation()
 {
+	CalenderSubsystem->UpdateCalender();
+
 	if(!HasEnoughBalanceToPayRent())	// if the balance is not enough to pay the rent
 	{
 		OnStrikesUpdated.Broadcast(CurrentStrikes++);
@@ -47,41 +49,3 @@ void AGameLevelMode::OnWeekComplete_Implementation()
 }
 
 #pragma endregion
-
-#pragma region PizzaSubsystem Bind Methods
-
-void AGameLevelMode::OnOrderComplete_Implementation(int CustomerID, FPizzaStruct OrderSummary)
-{
-	const auto balance = ResourceSubsystem->AddBalance(ResourceToAdd);
-	
-	//Check the current balance to see if the they can pay the rent
-	const auto decision = (balance > TargetResourceThreshold)? WIN: CONTINUE;
-	OnDecisionMade.Broadcast(decision);
-}
-
-#pragma endregion
-
-#pragma region Interface Methods
-
-void AGameLevelMode::RequestForOrders_Implementation()
-{
-}
-
-/*
-void AGameLevelMode::OnPlayerStatusUpdated_Implementation(const EPlayerArrivalStatus PlayerStatus)
-{
-	OnPlayerStatusUpdate.Broadcast(PlayerStatus);
-	InitiateOrders(PlayerStatus);
-	// if the player has arrived than start a new day
-
-	// if the player is late than ONLY CREATE THE ORDERS AND DISPLAY THE VISUALS WHEN THE STATUS IS UPDATED TO ARRIVED
-}
-#pragma endregion
-
-void AGameLevelMode::InitiateOrders_Implementation(EPlayerArrivalStatus Status)
-{
-	
-}
-*/
-
-

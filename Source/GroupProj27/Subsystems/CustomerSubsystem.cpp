@@ -13,5 +13,24 @@ void UCustomerSubsystem::ToggleCustomer_Implementation(int CustomerID, bool shou
 }
 void UCustomerSubsystem::OrderCollected(int ID)
 {
-	OnOrderCollected.Broadcast(ID, Orders.Num() -1);
+	const auto& CustomerRef = Orders[ID];
+	if(CustomerRef != nullptr)
+	{
+		CustomerRef->ToggleCustomer(false);
+		Orders.Remove(ID);
+		OnOrderCollected.Broadcast(ID, Orders.Num());
+	}
+}
+
+void UCustomerSubsystem::UpdateCustomersForCollection()
+{
+	for (auto o : Orders)
+	{
+		int id = o.Value->GetID();
+
+		if(Customers.Contains(id))
+		{
+			Customers[id]->ToggleCustomer(true);
+		}
+	}
 }

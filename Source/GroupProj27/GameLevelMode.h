@@ -9,7 +9,6 @@
 #include "Interfaces/PizzaModeInterface.h"
 #include "Subsystems/ResourceSubsystem.h"
 #include "GameLevelMode.generated.h"
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnPlayerStatusUpdateSignature, EPlayerArrivalStatus, PlayerStatus);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnDecisionMade, EGameDecision, Decision);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnStrikesUpdated, int, Strikes);
 
@@ -44,8 +43,6 @@ public:
 
 
 	UPROPERTY(BlueprintAssignable, BlueprintCallable)
-	FOnPlayerStatusUpdateSignature OnPlayerStatusUpdate;
-	UPROPERTY(BlueprintAssignable, BlueprintCallable)
 	FOnDecisionMade OnDecisionMade;
 	UPROPERTY(BlueprintAssignable, BlueprintCallable)
 	FOnStrikesUpdated OnStrikesUpdated;
@@ -57,19 +54,12 @@ public:
 
 	virtual void OnPostLogin(AController* NewPlayer) override;
 
-	// Pizza Subsystem methods
-	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
-	void OnOrderComplete(int CustomerID, FPizzaStruct OrderSummary);
-
 	// Calender Subsystem methods
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
 	void OnDayStart();
 
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
 	void OnWeekComplete();
-
-	// Interface methods
-	virtual void RequestForOrders_Implementation() override;
 
 	// Private Methods
 	UFUNCTION(BlueprintCallable, BlueprintPure)
