@@ -4,4 +4,10 @@
 #include "CustomerMarker.h"
 
 
+void ACustomerMarker::ToggleCustomer_Implementation(bool Value)
+{
+}
 
+void ACustomerMarker::CollectPizza_Implementation()
+{
+}

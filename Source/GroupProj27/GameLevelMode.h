@@ -39,6 +39,9 @@ public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Private")
 	bool bHasReached;
 
+	UPROPERTY(BlueprintReadWrite)
+	bool bWasPlayerLate;
+
 
 	UPROPERTY(BlueprintAssignable, BlueprintCallable)
 	FOnPlayerStatusUpdateSignature OnPlayerStatusUpdate;
@@ -47,8 +50,6 @@ public:
 	UPROPERTY(BlueprintAssignable, BlueprintCallable)
 	FOnStrikesUpdated OnStrikesUpdated;
 	
-	UPROPERTY(BlueprintReadWrite)
-	class UPizzaSubsystem* PizzaSubsystem;
 	UPROPERTY(BlueprintReadWrite)
 	class UCalenderSubsystem* CalenderSubsystem;
 	UPROPERTY(BlueprintReadWrite)
@@ -69,9 +70,7 @@ public:
 
 	// Interface methods
 	virtual void RequestForOrders_Implementation() override;
-	virtual void OnPlayerStatusUpdated_Implementation(EPlayerArrivalStatus PlayerStatus) override;
-	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
-	void OnPlayerIsLate(bool bHasArrived);
+
 	// Private Methods
 	UFUNCTION(BlueprintCallable, BlueprintPure)
 	bool HasEnoughBalanceToPayRent() {return ResourceSubsystem->GetCurrentBalance() > TargetResourceThreshold; }

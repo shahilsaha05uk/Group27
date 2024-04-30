@@ -4,9 +4,11 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
+#include "GroupProj27/HelperClasses/StructClass.h"
 #include "Pizza.generated.h"
 
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnQualityUpdateSignature, int, id, int, quality);
+// This is to update the Pizza details
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnUpdatePizzaSignature, FPizzaStruct, pStruct);
 
 UCLASS()
 class GROUPPROJ27_API APizza : public AActor
@@ -17,25 +19,28 @@ private:
 	UPROPERTY()
 	int ID;
 	UPROPERTY()
-	int CurrentQuality = 100;
+	int DecreaseRate;
+	UPROPERTY()
+	FPizzaStruct PizzaDetails;
+	UPROPERTY()
+	class UPizzaComponent* mPizzaComp;
 
 	UPROPERTY()
 	FTimerHandle DegradeTimeHandler;
 
 public:
-
 	UPROPERTY(BlueprintAssignable, BlueprintCallable)
-	FOnQualityUpdateSignature OnQualityUpdateSignature;
+	FOnUpdatePizzaSignature OnPizzaUpdated;
 	
-	UPROPERTY(EditDefaultsOnly)
-	int mInterval = 3000;	// the interval before the next degrade
-	UPROPERTY(EditDefaultsOnly)
-	int mRate = 1;	// the rate at which the quality will decrease
-	
+	virtual void BeginDestroy() override;
+	UFUNCTION(BlueprintCallable, BlueprintPure)
+	const FPizzaStruct GetDetails() {return PizzaDetails;}
 	UFUNCTION(BlueprintCallable, BlueprintPure)
 	int GetID(){return ID;}
+
 	UFUNCTION(BlueprintCallable)
-	void Init(int pizza_id);
+	void Init(class UPizzaComponent* pComp, FPizzaStruct pDetails);
 	UFUNCTION(BlueprintCallable)
-	void DegradeQuality();
+	void UpdatePizza();
+
 };

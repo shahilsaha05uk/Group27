@@ -20,4 +20,9 @@ public:
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
 	FCustomerStruct mCustomerDetails;
 
+
+	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
+	void CollectPizza();
+	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
+	void ToggleCustomer(bool Value);
 };

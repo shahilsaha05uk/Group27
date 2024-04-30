@@ -27,4 +27,6 @@ public:
 	FVector GetCameraLookAt();
 	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
 	void ReachedDestination(int ID);
+	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
+	void OnOrdersRequested();
 };

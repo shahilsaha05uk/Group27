@@ -3,24 +3,36 @@
 
 #include "Pizza.h"
 
+#include "GroupProj27/PizzaComponent.h"
 
-void APizza::Init(int pizza_id)
+
+void APizza::BeginDestroy()
 {
-	ID = pizza_id;
-	GetWorld()->GetTimerManager().SetTimer(DegradeTimeHandler, this, &APizza::DegradeQuality, mRate, true);
+	Super::BeginDestroy();
+
+	OnPizzaUpdated.RemoveAll(this);
 }
 
-void APizza::DegradeQuality()
+void APizza::Init(UPizzaComponent* pComp, FPizzaStruct pDetails)
 {
-	if(CurrentQuality > 0)
-	{
-		CurrentQuality-= mRate;
+	PizzaDetails = pDetails;
+	DecreaseRate = pDetails.DecreaseRate;
+	mPizzaComp = pComp;
+}
 
-		OnQualityUpdateSignature.Broadcast(ID, CurrentQuality);
-	}
-	else
-	{
-		DegradeTimeHandler.Invalidate();
-		GetWorld()->GetTimerManager().ClearTimer(DegradeTimeHandler);
-	}
+void APizza::UpdatePizza()
+{
+	FString &review = PizzaDetails.Review;
+	int &CurrentQuality = PizzaDetails.Quality;
+
+	// Update the Current Quality
+	CurrentQuality -= DecreaseRate;
+
+	// Update the Current Review
+	if(CurrentQuality >= 70) review = "Perfect!!";
+	else if(CurrentQuality >= 40 && CurrentQuality <70) review = "Good!!";
+	else if(CurrentQuality >= 10 && CurrentQuality <40) review = "Average!!";
+	else review = "POOP!!!";
+	
+	OnPizzaUpdated.Broadcast(PizzaDetails);
 }
