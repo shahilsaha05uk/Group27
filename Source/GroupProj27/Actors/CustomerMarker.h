@@ -34,7 +34,7 @@ public:
 	class UCustomerSubsystem* CustomerSubsystem;
 	UPROPERTY(BlueprintAssignable, BlueprintCallable)
 	FOnUpdatePizzaSignature OnPizzaUpdated;
-
+	
 	UPROPERTY(BlueprintReadWrite)
 	bool bChosenForOrderList;
 
