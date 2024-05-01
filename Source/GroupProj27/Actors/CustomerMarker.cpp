@@ -46,10 +46,6 @@ void ACustomerMarker::Init(UPizzaComponent* pComp, FPizzaStruct pDetails)
 	CustomerSubsystem->OnOrderInitialised.AddDynamic(this, &ThisClass::OnInitialisedForOrder);
 }
 
-// void ACustomerMarker::UpdatePizza_Implementation()
-// {
-// }
-
 void ACustomerMarker::UpdatePizza()
 {
 	FString &review = PizzaDetails.Review;
@@ -65,4 +61,4 @@ void ACustomerMarker::UpdatePizza()
 	else review = "POOP!!!";
 	
 	OnPizzaUpdated.Broadcast(PizzaDetails);
-} 
+}
