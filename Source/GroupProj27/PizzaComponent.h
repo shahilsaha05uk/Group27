@@ -32,7 +32,7 @@ public:
 	// Order Management
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
 	bool InitiateOrders(bool AutoInitialise);
-	UFUNCTION(BlueprintCallable)
+	UFUNCTION(BlueprintCallable,BlueprintNativeEvent)
 	bool CreateOrder(int CustomerID);
 
 	// Quality Management

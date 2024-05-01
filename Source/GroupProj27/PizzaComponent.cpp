@@ -20,21 +20,21 @@ bool UPizzaComponent::InitiateOrders_Implementation(bool AutoInitialise)
 	return false;
 }
 
-bool UPizzaComponent::CreateOrder(int CustomerID)
+bool UPizzaComponent::CreateOrder_Implementation(int CustomerID)
 {
-	if(mCustomerSubsystem->GetOrderList().Contains(CustomerID)) return false;
-	
-	const FActorSpawnParameters params = FActorSpawnParameters();
-	if(const auto Customer = mCustomerSubsystem->GetCustomer(CustomerID); Customer != nullptr)
-	{
-		Customer->Init(this, FPizzaStruct({CustomerID, 100, 1, ""}));
-		mCustomerSubsystem->AddOrder(CustomerID, Customer);
-		return true;
-	}
+	//if(mCustomerSubsystem->GetOrderList().Contains(CustomerID)) return false;
+	//
+	//const FActorSpawnParameters params = FActorSpawnParameters();
+	//if(const auto Customer = mCustomerSubsystem->GetCustomer(CustomerID); Customer != nullptr)
+	//{
+	//	Customer->Init(this, FPizzaStruct(100, "",
+	//	mCustomerSubsystem->AddOrder(CustomerID, Customer);
+	//	return true;
+	//}
+	//return false;
+
 	return false;
 }
-
-
 #pragma endregion
 
 void UPizzaComponent::StartQualityTimer()
