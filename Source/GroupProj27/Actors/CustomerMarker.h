@@ -34,7 +34,7 @@ public:
 	class UCustomerSubsystem* CustomerSubsystem;
 	UPROPERTY(BlueprintAssignable, BlueprintCallable)
 	FOnUpdatePizzaSignature OnPizzaUpdated;
-
+	
 	UPROPERTY(BlueprintReadWrite)
 	bool bChosenForOrderList;
 
@@ -51,15 +51,9 @@ public:
 	void Init(class UPizzaComponent* pComp, FPizzaStruct pDetails);
 	UFUNCTION(BlueprintCallable)
 	void UpdatePizza();
-	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
-	void AddQuality(int increaseBy);
-	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
-	void TakeQualityDamage();
-
-
+	
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
 	FCustomerStruct mCustomerDetails;
-	
 	
 	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
 	void CollectPizza();

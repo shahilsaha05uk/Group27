@@ -12,17 +12,50 @@
 // Sets default values
 AParkourPlayer::AParkourPlayer()
 {
+	mTracerComponent = CreateDefaultSubobject<UArrowComponent>("Tracer");
+	mTracerComponent->SetupAttachment(GetMesh());
+
+	mLedgeColliderComponent = CreateDefaultSubobject<UCapsuleComponent>("LedgeCollider");
+	mLedgeColliderComponent->SetupAttachment(RootComponent);
+
 	mCameraHandlerComponent = CreateDefaultSubobject<USpringArmComponent>("Camera Handler");
 	mCameraHandlerComponent->SetupAttachment(RootComponent);
 
 	mCameraComponent = CreateDefaultSubobject<UCameraComponent>("Camera");
 	mCameraComponent->SetupAttachment(mCameraHandlerComponent);
+
+}
+
+void AParkourPlayer::OnPlayerOverlapBegin_Implementation(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
+	UPrimitiveComponent* OtherComp, int OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
+{
+}
+
+void AParkourPlayer::OnPlayerOverlapEnd_Implementation(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
+	UPrimitiveComponent* OtherComp, int OtherBodyIndex)
+{
 }
 
 void AParkourPlayer::BeginPlay()
 {
+	// Do the bindings
+	mLedgeColliderComponent->OnComponentBeginOverlap.AddDynamic(this, &AParkourPlayer::OnPlatformCollisionBegin);
+	mLedgeColliderComponent->OnComponentEndOverlap.AddDynamic(this, &AParkourPlayer::OnPlatformCollisionEnd);
+	GetCapsuleComponent()->OnComponentBeginOverlap.AddDynamic(this, &ThisClass::OnPlayerOverlapBegin);
+	GetCapsuleComponent()->OnComponentEndOverlap.AddDynamic(this, &ThisClass::OnPlayerOverlapEnd);
+
 	mDefaultWalkSpeed = GetCharacterMovement()->MaxWalkSpeed;
 	Super::BeginPlay();
+}
+
+void AParkourPlayer::OnPlatformCollisionBegin_Implementation(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
+                                                             UPrimitiveComponent* OtherComp, int OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
+{
+}
+
+void AParkourPlayer::OnPlatformCollisionEnd_Implementation(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
+	UPrimitiveComponent* OtherComp, int OtherBodyIndex)
+{
 }
 
 #pragma region Player Input Implementation
@@ -66,6 +99,7 @@ void AParkourPlayer::Slide_Implementation(const FInputActionValue& Value)
 
 }
 
+
 #pragma endregion
 
 void AParkourPlayer::SetWalkSpeed_Implementation(float Value)
@@ -88,13 +122,12 @@ void AParkourPlayer::OnOrdersRequested_Implementation()
 	
 }
 
-UCharacterMovementComponent* AParkourPlayer::GetMovementComp_Implementation()
+void AParkourPlayer::Hang_Implementation(bool isLedgeDetected)
 {
-	return GetCharacterMovement();
+	
 }
 
-ACharacter* AParkourPlayer::GetCharacter_Implementation()
+void AParkourPlayer::StopHamg_Implementation()
 {
-	return this;
+	
 }
-

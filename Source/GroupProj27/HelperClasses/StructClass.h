@@ -8,22 +8,66 @@
 
 
 USTRUCT(BlueprintType)
-struct FCharacterDetails
+struct FState
+{
+	GENERATED_BODY()
+
+public:
+	
+	UPROPERTY(BlueprintReadWrite)
+	int CurrentBalance;
+	UPROPERTY(BlueprintReadWrite)
+	int CurrentWeek;
+	UPROPERTY(BlueprintReadWrite)
+	int CurrentDay;
+};
+
+
+USTRUCT(BlueprintType)
+struct FBounds
 {
 	GENERATED_BODY()
 
 public:
 
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
-	int ID;
+	FVector Origin;
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
-	FString Name;
+	FVector Extent;
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
-	class UTexture2D* Image;
+	FVector Top;
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
-	class USkeletalMesh* CharacterMesh;	
+	FVector Bottom;
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+	FVector LeftOnX;
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+	FVector RightOnX;
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+	FVector LeftOnY;
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+	FVector RightOnY;
 };
 
+USTRUCT(BlueprintType)
+struct FPlayerBoxTracePositions
+{
+	GENERATED_BODY()
+
+public:
+	
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+	FVector Up_StartPos;
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+	FVector Up_EndPos;
+
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+	FVector Down_StartPos;
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+	FVector Down_EndPos;
+	
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+	FVector Full_EndPos;
+};
 
 USTRUCT(BlueprintType)
 struct FPizzaStruct
@@ -37,8 +81,6 @@ public:
 	int Quality;
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
 	int DecreaseRate;
-	UPROPERTY(BlueprintReadWrite, EditAnywhere)
-	int DamageRate;
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
 	FString Review;
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)

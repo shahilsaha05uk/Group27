@@ -29,8 +29,4 @@ public:
 	void ReachedDestination(int ID);
 	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
 	void OnOrdersRequested();
-	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
-	UCharacterMovementComponent* GetMovementComp();
-	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
-	ACharacter* GetCharacter();
 };

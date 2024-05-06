@@ -71,6 +71,10 @@ public:
 	void Detect();
 	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
 	void StopDetect();
+	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
+	void Hang();
+	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
+	void StopHang();
 
 	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
 	void LerpLocation(float locAlpha);
