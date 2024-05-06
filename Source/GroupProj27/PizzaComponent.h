@@ -33,7 +33,7 @@ public:
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
 	bool InitiateOrders(bool AutoInitialise);
 	UFUNCTION(BlueprintCallable,BlueprintNativeEvent)
-	bool CreateOrder(int CustomerID);
+	bool CreateOrder(int CustomerID, FPizzaStruct PizzaDetails);
 
 	// Quality Management
 
