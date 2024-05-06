@@ -63,6 +63,15 @@ void ACustomerMarker::UpdatePizza()
 	OnPizzaUpdated.Broadcast(PizzaDetails);
 }
 
+void ACustomerMarker::TakeQualityDamage_Implementation()
+{
+	int &CurrentQuality = PizzaDetails.Quality;
+	int &Damage = PizzaDetails.DamageRate;
+
+	CurrentQuality-= Damage;
+	OnPizzaUpdated.Broadcast(PizzaDetails);
+}
+
 void ACustomerMarker::AddQuality_Implementation(int increaseBy)
 {
 	int &CurrentQuality = PizzaDetails.Quality;

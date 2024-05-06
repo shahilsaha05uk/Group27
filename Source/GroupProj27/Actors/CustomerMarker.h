@@ -53,6 +53,8 @@ public:
 	void UpdatePizza();
 	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
 	void AddQuality(int increaseBy);
+	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
+	void TakeQualityDamage();
 
 
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
