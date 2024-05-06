@@ -16,9 +16,4 @@ class GROUPPROJ27_API UHelperMethods : public UBlueprintFunctionLibrary
 	GENERATED_BODY()
 
 public:
-
-	UFUNCTION(BlueprintCallable, BlueprintPure)
-	static FBounds GetBounds(AActor* actor);
-	UFUNCTION(BlueprintCallable, BlueprintPure)
-	static FPlayerBoxTracePositions GetPlayerBoxTracePositions(FVector StartPos);
 };

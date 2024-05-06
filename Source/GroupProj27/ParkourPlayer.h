@@ -22,8 +22,6 @@ private:
 public:
 
 	UPROPERTY(BlueprintReadWrite, EditDefaultsOnly, Category = "Components")
-	class UArrowComponent* mTracerComponent;
-	UPROPERTY(BlueprintReadWrite, EditDefaultsOnly, Category = "Components")
 	class UCapsuleComponent* mLedgeColliderComponent;
 	UPROPERTY(BlueprintReadWrite, EditDefaultsOnly, Category = "Components")
 	class USpringArmComponent* mCameraHandlerComponent;

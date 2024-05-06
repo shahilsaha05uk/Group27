@@ -12,9 +12,6 @@
 // Sets default values
 AParkourPlayer::AParkourPlayer()
 {
-	mTracerComponent = CreateDefaultSubobject<UArrowComponent>("Tracer");
-	mTracerComponent->SetupAttachment(GetMesh());
-
 	mLedgeColliderComponent = CreateDefaultSubobject<UCapsuleComponent>("LedgeCollider");
 	mLedgeColliderComponent->SetupAttachment(RootComponent);
 
