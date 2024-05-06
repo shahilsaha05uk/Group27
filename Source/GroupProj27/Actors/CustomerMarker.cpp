@@ -62,3 +62,11 @@ void ACustomerMarker::UpdatePizza()
 	
 	OnPizzaUpdated.Broadcast(PizzaDetails);
 }
+
+void ACustomerMarker::AddQuality_Implementation(int increaseBy)
+{
+	int &CurrentQuality = PizzaDetails.Quality;
+	CurrentQuality += increaseBy;
+
+	OnPizzaUpdated.Broadcast(PizzaDetails);
+}
