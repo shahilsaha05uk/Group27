@@ -5,16 +5,8 @@
 
 #include "Components/ArrowComponent.h"
 #include "Components/CapsuleComponent.h"
-#include "GroupProj27/HelperClasses/HelperMethods.h"
-#include "GroupProj27/HelperClasses/StructClass.h"
-#include "GroupProj27/Interfaces/ClimbInterface.h"
-#include "GroupProj27/Interfaces/LedgeInterface.h"
-#include "GroupProj27/Interfaces/ParkourPlayerInterface.h"
-#include "GroupProj27/Interfaces/PlatformInterface.h"
 #include "Kismet/KismetMathLibrary.h"
 #include "Kismet/KismetSystemLibrary.h"
-
-
 
 // Sets default values for this component's properties
 UClimbComponent::UClimbComponent()
@@ -83,7 +75,6 @@ void UClimbComponent::Detect_Implementation()
 	{
 		StopAttemptToHang();
 		StopDetect();
-		Hang();
 	}
 }
 
@@ -91,24 +82,6 @@ void UClimbComponent::StopDetect_Implementation()
 {
 	mDetectTimeHandler.Invalidate();
 	GetWorld()->GetTimerManager().ClearTimer(mDetectTimeHandler);
-}
-
-void UClimbComponent::Hang_Implementation()
-{
-	AActor* Owner = GetOwner();
-	if(UKismetSystemLibrary::DoesImplementInterface(Owner, UClimbInterface::StaticClass()))
-	{
-		IClimbInterface::Execute_Hang(Owner, bDetectSuccess);
-	}
-}
-
-void UClimbComponent::StopHang_Implementation()
-{
-	AActor* Owner = GetOwner();
-	if(UKismetSystemLibrary::DoesImplementInterface(Owner, UClimbInterface::StaticClass()))
-	{
-		IClimbInterface::Execute_StopHamg(Owner);
-	}
 }
 
 bool UClimbComponent::TraceForAValidPlatform_Implementation(FVector Start, FVector End, FHitResult &hit)

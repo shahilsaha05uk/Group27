@@ -20,19 +20,17 @@ bool UPizzaComponent::InitiateOrders_Implementation(bool AutoInitialise)
 	return false;
 }
 
-bool UPizzaComponent::CreateOrder_Implementation(int CustomerID)
+bool UPizzaComponent::CreateOrder_Implementation(int CustomerID, FPizzaStruct PizzaDetails)
 {
-	//if(mCustomerSubsystem->GetOrderList().Contains(CustomerID)) return false;
-	//
-	//const FActorSpawnParameters params = FActorSpawnParameters();
-	//if(const auto Customer = mCustomerSubsystem->GetCustomer(CustomerID); Customer != nullptr)
-	//{
-	//	Customer->Init(this, FPizzaStruct(100, "",
-	//	mCustomerSubsystem->AddOrder(CustomerID, Customer);
-	//	return true;
-	//}
-	//return false;
-
+	if(mCustomerSubsystem->GetOrderList().Contains(CustomerID)) return false;
+	
+	const FActorSpawnParameters params = FActorSpawnParameters();
+	if(const auto Customer = mCustomerSubsystem->GetCustomer(CustomerID); Customer != nullptr)
+	{
+		Customer->Init(this, PizzaDetails);
+		mCustomerSubsystem->AddOrder(CustomerID, Customer);
+		return true;
+	}
 	return false;
 }
 #pragma endregion
