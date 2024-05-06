@@ -23,10 +23,7 @@
 				"Editor"
 			]
 		},
-		{
-			"Name": "HoudiniEngine",
-			"Enabled": true
-		},
+		
 		{
 			"Name": "Water",
 			"Enabled": true
