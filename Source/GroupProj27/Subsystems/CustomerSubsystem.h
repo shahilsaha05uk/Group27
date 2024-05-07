@@ -65,4 +65,6 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void UpdateCustomersForCollection();
 
+	UFUNCTION(BlueprintCallable)
+	void DealDamageToOrders(int damageVal);
 };

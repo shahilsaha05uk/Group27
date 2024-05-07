@@ -34,3 +34,13 @@ void UCustomerSubsystem::UpdateCustomersForCollection()
 		}
 	}
 }
+
+void UCustomerSubsystem::DealDamageToOrders(int damageVal)
+{
+	if(Orders.IsEmpty()) return;
+
+	for (auto o : Orders)
+	{
+		o.Value->DeductQuality(damageVal);
+	}
+}
