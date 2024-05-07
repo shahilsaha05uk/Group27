@@ -21,10 +21,6 @@ private:
 public:
 
 	UPROPERTY(BlueprintReadWrite, EditDefaultsOnly, Category = "Components")
-	class UArrowComponent* mTracerComponent;
-	UPROPERTY(BlueprintReadWrite, EditDefaultsOnly, Category = "Components")
-	class UCapsuleComponent* mLedgeColliderComponent;
-	UPROPERTY(BlueprintReadWrite, EditDefaultsOnly, Category = "Components")
 	class USpringArmComponent* mCameraHandlerComponent;
 	UPROPERTY(BlueprintReadWrite, EditDefaultsOnly, Category = "Components")
 	class UCameraComponent* mCameraComponent;
@@ -34,16 +30,15 @@ public:
 
 	AParkourPlayer();
 
-	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
-	void OnPlatformCollisionBegin(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
-	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
-	void OnPlatformCollisionEnd(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int OtherBodyIndex);
-
 	virtual void BeginPlay() override;
 
 	// IParkourPlayerInterface interface methods
 	virtual FVector GetCameraLookAt_Implementation() override;
-	
+	virtual void ReachedDestination_Implementation(int ID) override;
+	virtual void OnOrdersRequested_Implementation() override;
+	virtual UCharacterMovementComponent* GetMovementComp_Implementation() override;
+	virtual ACharacter* GetCharacter_Implementation() override;
+
 	// IPlayerInputInterface interface methods
 	virtual void Move_Implementation(const FInputActionValue& Value) override;
 	virtual void Look_Implementation(const FInputActionValue& Value) override;
@@ -53,6 +48,7 @@ public:
 	virtual void StopJump_Implementation(const FInputActionValue& Value) override;
 	virtual void Climb_Implementation(const FInputActionValue& Value) override;
 	virtual void Slide_Implementation(const FInputActionValue& Value) override;
+
 
 	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
 	void SetWalkSpeed(float Value);

@@ -25,4 +25,12 @@ public:
 
 	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
 	FVector GetCameraLookAt();
+	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
+	void ReachedDestination(int ID);
+	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
+	void OnOrdersRequested();
+	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
+	UCharacterMovementComponent* GetMovementComp();
+	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
+	ACharacter* GetCharacter();
 };
