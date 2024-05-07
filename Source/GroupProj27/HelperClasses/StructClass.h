@@ -38,8 +38,6 @@ public:
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
 	int DecreaseRate;
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
-	int DamageRate;
-	UPROPERTY(BlueprintReadWrite, EditAnywhere)
 	FString Review;
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
 	class UTexture2D* Icon;
