@@ -49,10 +49,10 @@ void ACustomerMarker::Init(UPizzaComponent* pComp, FPizzaStruct pDetails)
 void ACustomerMarker::UpdatePizza()
 {
 	FString &review = PizzaDetails.Review;
-	int &CurrentQuality = PizzaDetails.Quality;
+	const int &CurrentQuality = PizzaDetails.Quality;
 
 	// Update the Current Quality
-	CurrentQuality -= DecreaseRate;
+	DeductQuality(DecreaseRate);
 
 	// Update the Current Review
 	if(CurrentQuality >= 70) review = "Perfect!!";
@@ -63,15 +63,7 @@ void ACustomerMarker::UpdatePizza()
 	OnPizzaUpdated.Broadcast(PizzaDetails);
 }
 
-void ACustomerMarker::TakeQualityDamage_Implementation()
-{
-	int &CurrentQuality = PizzaDetails.Quality;
-	int &Damage = PizzaDetails.DamageRate;
-
-	CurrentQuality-= Damage;
-	OnPizzaUpdated.Broadcast(PizzaDetails);
-}
-
+// Quality Manipulation
 void ACustomerMarker::AddQuality_Implementation(int increaseBy)
 {
 	int &CurrentQuality = PizzaDetails.Quality;
@@ -79,3 +71,13 @@ void ACustomerMarker::AddQuality_Implementation(int increaseBy)
 
 	OnPizzaUpdated.Broadcast(PizzaDetails);
 }
+
+void ACustomerMarker::DeductQuality_Implementation(int decreaseBy)
+{
+	int &CurrentQuality = PizzaDetails.Quality;
+
+	CurrentQuality-= decreaseBy;
+	OnPizzaUpdated.Broadcast(PizzaDetails);
+
+}
+

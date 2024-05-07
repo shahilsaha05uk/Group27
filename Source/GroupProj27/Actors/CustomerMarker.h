@@ -51,10 +51,11 @@ public:
 	void Init(class UPizzaComponent* pComp, FPizzaStruct pDetails);
 	UFUNCTION(BlueprintCallable)
 	void UpdatePizza();
+
 	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
 	void AddQuality(int increaseBy);
 	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
-	void TakeQualityDamage();
+	void DeductQuality(int decreaseBy);
 
 
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
