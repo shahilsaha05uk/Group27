@@ -9,7 +9,6 @@
 #include "Interfaces/PizzaModeInterface.h"
 #include "Subsystems/ResourceSubsystem.h"
 #include "GameLevelMode.generated.h"
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnPlayerStatusUpdateSignature, EPlayerArrivalStatus, PlayerStatus);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnDecisionMade, EGameDecision, Decision);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnStrikesUpdated, int, Strikes);
 
@@ -39,26 +38,21 @@ public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Private")
 	bool bHasReached;
 
+	UPROPERTY(BlueprintReadWrite)
+	bool bWasPlayerLate;
 
-	UPROPERTY(BlueprintAssignable, BlueprintCallable)
-	FOnPlayerStatusUpdateSignature OnPlayerStatusUpdate;
+
 	UPROPERTY(BlueprintAssignable, BlueprintCallable)
 	FOnDecisionMade OnDecisionMade;
 	UPROPERTY(BlueprintAssignable, BlueprintCallable)
 	FOnStrikesUpdated OnStrikesUpdated;
 	
 	UPROPERTY(BlueprintReadWrite)
-	class UPizzaSubsystem* PizzaSubsystem;
-	UPROPERTY(BlueprintReadWrite)
 	class UCalenderSubsystem* CalenderSubsystem;
 	UPROPERTY(BlueprintReadWrite)
 	class UResourceSubsystem* ResourceSubsystem;
 
 	virtual void OnPostLogin(AController* NewPlayer) override;
-
-	// Pizza Subsystem methods
-	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
-	void OnOrderComplete(int CustomerID, FPizzaStruct OrderSummary);
 
 	// Calender Subsystem methods
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
@@ -67,11 +61,6 @@ public:
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
 	void OnWeekComplete();
 
-	// Interface methods
-	virtual void RequestForOrders_Implementation() override;
-	virtual void OnPlayerStatusUpdated_Implementation(EPlayerArrivalStatus PlayerStatus) override;
-	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
-	void OnPlayerIsLate(bool bHasArrived);
 	// Private Methods
 	UFUNCTION(BlueprintCallable, BlueprintPure)
 	bool HasEnoughBalanceToPayRent() {return ResourceSubsystem->GetCurrentBalance() > TargetResourceThreshold; }
