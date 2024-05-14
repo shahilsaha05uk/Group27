@@ -61,6 +61,8 @@ public:
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
 	void OnWeekComplete();
 
+	UFUNCTION(BlueprintPure, BlueprintCallable)
+	int GetCurrentStrikes() {return CurrentStrikes; }
 	// Private Methods
 	UFUNCTION(BlueprintCallable, BlueprintPure)
 	bool HasEnoughBalanceToPayRent() {return ResourceSubsystem->GetCurrentBalance() > TargetResourceThreshold; }
