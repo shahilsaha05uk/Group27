@@ -56,8 +56,7 @@ public:
 	void AddQuality(int increaseBy);
 	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
 	void DeductQuality(int decreaseBy);
-
-
+	
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
 	FCustomerStruct mCustomerDetails;
 	

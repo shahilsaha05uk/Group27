@@ -34,6 +34,8 @@ public:
 	bool InitiateOrders(bool AutoInitialise);
 	UFUNCTION(BlueprintCallable,BlueprintNativeEvent)
 	bool CreateOrder(int CustomerID, FPizzaStruct PizzaDetails);
+	UFUNCTION(BlueprintCallable,BlueprintNativeEvent)
+	void ClearOrders();
 
 	// Quality Management
 
