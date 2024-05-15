@@ -19,15 +19,9 @@ public:
 	UInputAction* IA_Look;
 
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "UI Inputs")
-	UInputAction* IA_Run;
-	
-	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "UI Inputs")
 	UInputAction* IA_Jump;
 	
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "UI Inputs")
-	UInputAction* IA_Climb;
-	
-	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "UI Inputs")
-	UInputAction* IA_Slide;
-	
+	UInputAction* IA_Roll;
+
 };
