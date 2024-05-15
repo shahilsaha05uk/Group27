@@ -3,16 +3,16 @@
 #include "EnhancedInputSubsystems.h"
 #include "InputTriggers.h"
 #include "DataAssets/DA_Inputs.h"
+#include "DataAssets/DA_UIInputs.h"
 #include "Interfaces/PlayerInputInterface.h"
+#include "Interfaces/PlayerUIInputInterface.h"
 #include "Kismet/KismetSystemLibrary.h"
 
 void AInputController::BeginPlay()
 {
 	Super::BeginPlay();
-	/*
 	PlayerCameraManager->ViewPitchMin = mMinCamPitch;
 	PlayerCameraManager->ViewPitchMax = mMaxCamPitch;
-*/
 }
 
 void AInputController::SetupInputComponent()
@@ -25,20 +25,21 @@ void AInputController::SetupInputComponent()
 
 		// Look
 		EnhancedInputComponent->BindAction(mInputData->IA_Look, ETriggerEvent::Triggered, this, &AInputController::Look);
-
-		// Run
-		EnhancedInputComponent->BindAction(mInputData->IA_Run, ETriggerEvent::Started, this, &AInputController::StartRunning);
-		EnhancedInputComponent->BindAction(mInputData->IA_Run, ETriggerEvent::Completed, this, &AInputController::StopRunning);
-
+		
 		// Jump
 		EnhancedInputComponent->BindAction(mInputData->IA_Jump, ETriggerEvent::Started, this, &AInputController::StartJump);
 		EnhancedInputComponent->BindAction(mInputData->IA_Jump, ETriggerEvent::Completed, this, &AInputController::StopJump);
 
-		// Climb
-		EnhancedInputComponent->BindAction(mInputData->IA_Climb, ETriggerEvent::Triggered, this, &AInputController::Climb);
+		// Roll
+		EnhancedInputComponent->BindAction(mInputData->IA_Roll, ETriggerEvent::Started, this, &AInputController::Roll);
 
-		// Slide
-		EnhancedInputComponent->BindAction(mInputData->IA_Slide, ETriggerEvent::Triggered, this, &AInputController::Slide);
+		// UI Inputs
+
+		// Pause
+		EnhancedInputComponent->BindAction(mUIInputData->IA_Pause, ETriggerEvent::Completed, this, &AInputController::PauseGame);
+		
+		// Toggle Phone
+		EnhancedInputComponent->BindAction(mUIInputData->IA_OpenPhone, ETriggerEvent::Completed, this, &AInputController::TogglePhone);
 	}
 
 	if (UEnhancedInputLocalPlayerSubsystem* Subsystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(GetLocalPlayer()))
@@ -47,6 +48,28 @@ void AInputController::SetupInputComponent()
 		Subsystem->AddMappingContext(mPlayerInputContext, 0);
 	}
 }
+
+#pragma region UI Actions
+void AInputController::PauseGame_Implementation(const FInputActionValue& Value)
+{
+	APawn* pawn = GetPawn();
+
+	if(UKismetSystemLibrary::DoesImplementInterface(pawn, UPlayerUIInputInterface::StaticClass()))
+	{
+		IPlayerUIInputInterface::Execute_PauseGame(pawn);
+	}
+}
+
+void AInputController::TogglePhone_Implementation(const FInputActionValue& Value)
+{
+	APawn* pawn = GetPawn();
+
+	if(UKismetSystemLibrary::DoesImplementInterface(pawn, UPlayerUIInputInterface::StaticClass()))
+	{
+		IPlayerUIInputInterface::Execute_TogglePhone(pawn);
+	}
+}
+#pragma endregion
 
 void AInputController::Look_Implementation(const FInputActionValue& Value)
 {
@@ -68,23 +91,13 @@ void AInputController::Move_Implementation(const FInputActionValue& Value)
 	}
 }
 
-void AInputController::StartRunning_Implementation(const FInputActionValue& Value)
+void AInputController::Roll_Implementation(const FInputActionValue& Value)
 {
 	APawn* pawn = GetPawn();
 
 	if(UKismetSystemLibrary::DoesImplementInterface(pawn, UPlayerInputInterface::StaticClass()))
 	{
-		IPlayerInputInterface::Execute_StartRunning(pawn, Value);
-	}
-}
-
-void AInputController::StopRunning_Implementation(const FInputActionValue& Value)
-{
-	APawn* pawn = GetPawn();
-
-	if(UKismetSystemLibrary::DoesImplementInterface(pawn, UPlayerInputInterface::StaticClass()))
-	{
-		IPlayerInputInterface::Execute_StopRunning(pawn, Value);
+		IPlayerInputInterface::Execute_Roll(pawn, Value);
 	}
 }
 
@@ -105,25 +118,5 @@ void AInputController::StopJump_Implementation(const FInputActionValue& Value)
 	if(UKismetSystemLibrary::DoesImplementInterface(pawn, UPlayerInputInterface::StaticClass()))
 	{
 		IPlayerInputInterface::Execute_StopJump(pawn, Value);
-	}
-}
-
-void AInputController::Climb_Implementation(const FInputActionValue& Value)
-{
-	APawn* pawn = GetPawn();
-
-	if(UKismetSystemLibrary::DoesImplementInterface(pawn, UPlayerInputInterface::StaticClass()))
-	{
-		IPlayerInputInterface::Execute_Climb(pawn, Value);
-	}
-}
-
-void AInputController::Slide_Implementation(const FInputActionValue& Value)
-{
-	APawn* pawn = GetPawn();
-
-	if(UKismetSystemLibrary::DoesImplementInterface(pawn, UPlayerInputInterface::StaticClass()))
-	{
-		IPlayerInputInterface::Execute_Slide(pawn, Value);
 	}
 }
