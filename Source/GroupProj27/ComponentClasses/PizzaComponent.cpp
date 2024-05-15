@@ -3,9 +3,9 @@
 
 #include "PizzaComponent.h"
 
-#include "Actors/CustomerMarker.h"
-#include "HelperClasses/StructClass.h"
-#include "Subsystems/CustomerSubsystem.h"
+#include "GroupProj27/Actors/CustomerMarker.h"
+#include "GroupProj27/HelperClasses/StructClass.h"
+#include "GroupProj27/Subsystems/CustomerSubsystem.h"
 
 void UPizzaComponent::BeginPlay()
 {

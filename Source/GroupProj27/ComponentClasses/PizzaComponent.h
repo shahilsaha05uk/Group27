@@ -4,7 +4,6 @@
 
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
-#include "HelperClasses/StructClass.h"
 #include "PizzaComponent.generated.h"
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent), Blueprintable, BlueprintType )
@@ -14,12 +13,6 @@ class GROUPPROJ27_API UPizzaComponent : public UActorComponent
 private:
 	UPROPERTY()
 	FTimerHandle QualityTimerHandle;
-	/*
-	UPROPERTY()
-	TMap<int, class APizza*> Orders;
-	*/
-
-	
 public:
 	UPROPERTY(BlueprintReadOnly)
 	class UCustomerSubsystem* mCustomerSubsystem;
@@ -38,8 +31,6 @@ public:
 	void ClearOrders();
 
 	// Quality Management
-
-	
 	UFUNCTION(BlueprintCallable)
 	void StartQualityTimer();
 	UFUNCTION(BlueprintCallable)
