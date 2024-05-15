@@ -6,18 +6,17 @@
 #include "GameFramework/Character.h"
 #include "Interfaces/ParkourPlayerInterface.h"
 #include "Interfaces/PlayerInputInterface.h"
+#include "Interfaces/PlayerUIInputInterface.h"
 #include "ParkourPlayer.generated.h"
 
 UCLASS()
-class GROUPPROJ27_API AParkourPlayer : public ACharacter, public IPlayerInputInterface, public IParkourPlayerInterface
+class GROUPPROJ27_API AParkourPlayer : public ACharacter, public IPlayerInputInterface, public IParkourPlayerInterface, public IPlayerUIInputInterface
 {
 	GENERATED_BODY()
 
 private:
 	UPROPERTY()
 	float mDefaultWalkSpeed;
-	
-	
 public:
 
 	UPROPERTY(BlueprintReadWrite, EditDefaultsOnly, Category = "Components")
@@ -42,14 +41,18 @@ public:
 	// IPlayerInputInterface interface methods
 	virtual void Move_Implementation(const FInputActionValue& Value) override;
 	virtual void Look_Implementation(const FInputActionValue& Value) override;
-	virtual void StartRunning_Implementation(const FInputActionValue& Value) override;
-	virtual void StopRunning_Implementation(const FInputActionValue& Value) override;
 	virtual void StartJump_Implementation(const FInputActionValue& Value) override;
 	virtual void StopJump_Implementation(const FInputActionValue& Value) override;
-	virtual void Climb_Implementation(const FInputActionValue& Value) override;
-	virtual void Slide_Implementation(const FInputActionValue& Value) override;
+	virtual void Roll_Implementation(const FInputActionValue& Value) override;
 
-
+	// Player UI Input Interface methods
+	virtual void PauseGame_Implementation() override;
+	virtual void TogglePhone_Implementation() override;
+	
+	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
+	void SaveMovementInputs(FVector RightVec, FVector ForwardVec, float X, float Y);
+	UFUNCTION(BlueprintCallable)
+	void SetCapsuleHeight(float Value, bool UpdateOverlaps);
 	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
 	void SetWalkSpeed(float Value);
 	UFUNCTION(BlueprintCallable, BlueprintPure)

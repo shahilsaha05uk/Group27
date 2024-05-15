@@ -30,21 +30,12 @@ public:
 	void Look(const FInputActionValue& Value);
 
 	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
-	void StartRunning(const FInputActionValue& Value);
-
-	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
-	void StopRunning(const FInputActionValue& Value);
-
-	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
 	void StartJump(const FInputActionValue& Value);
 
 	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
 	void StopJump(const FInputActionValue& Value);
 
 	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
-	void Climb(const FInputActionValue& Value);
-
-	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
-	void Slide(const FInputActionValue& Value);
+	void Roll(const FInputActionValue& Value);
 
 };

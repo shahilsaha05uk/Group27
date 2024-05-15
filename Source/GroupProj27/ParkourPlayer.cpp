@@ -3,8 +3,8 @@
 
 #include "ParkourPlayer.h"
 
+#include "InputActionValue.h"
 #include "Camera/CameraComponent.h"
-#include "Components/ArrowComponent.h"
 #include "Components/CapsuleComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/SpringArmComponent.h"
@@ -24,11 +24,14 @@ void AParkourPlayer::BeginPlay()
 	mDefaultWalkSpeed = GetCharacterMovement()->MaxWalkSpeed;
 	Super::BeginPlay();
 }
+void AParkourPlayer::SaveMovementInputs_Implementation(FVector RightVec, FVector ForwardVec, float X, float Y)
+{
+}
+
 
 #pragma region Player Input Implementation
 void AParkourPlayer::Move_Implementation(const FInputActionValue& Value)
 {
-
 }
 
 void AParkourPlayer::Look_Implementation(const FInputActionValue& Value)
@@ -36,19 +39,8 @@ void AParkourPlayer::Look_Implementation(const FInputActionValue& Value)
 	
 }
 
-void AParkourPlayer::StartRunning_Implementation(const FInputActionValue& Value)
-{
-
-}
-
-void AParkourPlayer::StopRunning_Implementation(const FInputActionValue& Value)
-{
-
-}
-
 void AParkourPlayer::StartJump_Implementation(const FInputActionValue& Value)
 {
-
 }
 
 void AParkourPlayer::StopJump_Implementation(const FInputActionValue& Value)
@@ -56,14 +48,28 @@ void AParkourPlayer::StopJump_Implementation(const FInputActionValue& Value)
 
 }
 
-void AParkourPlayer::Climb_Implementation(const FInputActionValue& Value)
+void AParkourPlayer::Roll_Implementation(const FInputActionValue& Value)
 {
 
 }
 
-void AParkourPlayer::Slide_Implementation(const FInputActionValue& Value)
+#pragma endregion
+
+#pragma region UI Inputs
+
+void AParkourPlayer::PauseGame_Implementation()
 {
 
+}
+
+void AParkourPlayer::TogglePhone_Implementation()
+{
+
+}
+
+void AParkourPlayer::SetCapsuleHeight(float Value, bool UpdateOverlaps)
+{
+	GetCapsuleComponent()->SetCapsuleHalfHeight(Value, UpdateOverlaps);
 }
 
 #pragma endregion
@@ -97,4 +103,3 @@ ACharacter* AParkourPlayer::GetCharacter_Implementation()
 {
 	return this;
 }
-
