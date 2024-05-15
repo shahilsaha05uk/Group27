@@ -16,6 +16,8 @@ public:
 
 	UPROPERTY(BlueprintReadWrite, EditDefaultsOnly)
 	class UDA_Inputs* mInputData;
+	UPROPERTY(BlueprintReadWrite, EditDefaultsOnly)
+	class UDA_UIInputs* mUIInputData;
 
 	UPROPERTY(BlueprintReadWrite, EditDefaultsOnly)
 	class UInputMappingContext* mPlayerInputContext;
@@ -41,22 +43,21 @@ public:
 	void Look(const FInputActionValue& Value);
 
 	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
-	void StartRunning(const FInputActionValue& Value);
-
-	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
-	void StopRunning(const FInputActionValue& Value);
-
-	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
 	void StartJump(const FInputActionValue& Value);
 
 	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
 	void StopJump(const FInputActionValue& Value);
 
 	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
-	void Climb(const FInputActionValue& Value);
+	void Roll(const FInputActionValue& Value);
 
+#pragma endregion
+
+#pragma region UI Actions
 	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
-	void Slide(const FInputActionValue& Value);
-
+	void PauseGame(const FInputActionValue& Value);
+	
+	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
+	void TogglePhone(const FInputActionValue& Value);
 #pragma endregion
 };
