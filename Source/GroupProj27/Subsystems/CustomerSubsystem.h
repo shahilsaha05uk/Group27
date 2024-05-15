@@ -56,11 +56,24 @@ public:
 		Orders.Add(ID, Pizza);
 	}
 	UFUNCTION(BlueprintCallable)
+	void FlushEverything()
+	{
+		if(!Orders.IsEmpty())
+			Orders.Empty(0);
+
+		for (auto c : Customers)
+		{
+			Customers.Remove(c.Key);
+		}
+	}
+	UFUNCTION(BlueprintCallable)
 	void UpdateOrders(const TMap<int, class ACustomerMarker*>& OrderList) { Orders = OrderList; }
 	UFUNCTION(BlueprintCallable, BlueprintPure)
 	ACustomerMarker* GetOrderStatus(int CustomerID) {return (Orders.Contains(CustomerID))? Orders[CustomerID]: nullptr;}
 	UFUNCTION(BlueprintCallable, BlueprintPure)
 	bool CanTakeOrders() { return Orders.IsEmpty(); }
+	UFUNCTION(BlueprintCallable, BlueprintPure)
+	bool HasOrders() { return Orders.Num() > 0; }
 		
 	UFUNCTION(BlueprintCallable)
 	void UpdateCustomersForCollection();

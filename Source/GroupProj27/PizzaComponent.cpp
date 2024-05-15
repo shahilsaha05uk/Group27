@@ -35,6 +35,11 @@ bool UPizzaComponent::CreateOrder_Implementation(int CustomerID, FPizzaStruct Pi
 }
 #pragma endregion
 
+void UPizzaComponent::ClearOrders_Implementation()
+{
+	StopQualityTimer();
+}
+
 void UPizzaComponent::StartQualityTimer()
 {
 	GetWorld()->GetTimerManager().SetTimer(QualityTimerHandle, this, &ThisClass::UpdateQuality, mQualityDecreaseRate, true);

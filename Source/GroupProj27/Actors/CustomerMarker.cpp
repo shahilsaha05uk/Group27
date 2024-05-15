@@ -17,7 +17,6 @@ void ACustomerMarker::BeginDestroy()
 	Super::BeginDestroy();
 }
 
-
 void ACustomerMarker::ToggleCustomer_Implementation(bool Value)
 {
 	bChosenForOrderList = false;
@@ -80,4 +79,3 @@ void ACustomerMarker::DeductQuality_Implementation(int decreaseBy)
 	OnPizzaUpdated.Broadcast(PizzaDetails);
 
 }
-
