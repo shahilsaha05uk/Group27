@@ -16,6 +16,7 @@ class GROUPPROJ27_API UCustomerSubsystem : public UGameInstanceSubsystem
 
 private:
 
+	int IDCount = -1;
 	UPROPERTY()
 	class ACustomerManager* CustomerManager;
 	UPROPERTY()
@@ -41,9 +42,14 @@ public:
 	void ToggleCustomer(int CustomerID, bool shouldActivate);
 
 	UFUNCTION(BlueprintCallable)
-	void RegisterCustomer(int ID, class ACustomerMarker* Customer)
+	int RegisterCustomer(class ACustomerMarker* Customer)
 	{
-		if(!Customers.Contains(ID)) Customers.Add(ID, Customer);
+		IDCount++;
+		if(!Customers.Contains(IDCount))
+		{
+			Customers.Add(IDCount, Customer);
+		}
+		return IDCount;
 	}
 	
 	// Order Mamangement
@@ -65,6 +71,7 @@ public:
 		{
 			Customers.Remove(c.Key);
 		}
+		IDCount = -1;
 	}
 	UFUNCTION(BlueprintCallable)
 	void UpdateOrders(const TMap<int, class ACustomerMarker*>& OrderList) { Orders = OrderList; }
