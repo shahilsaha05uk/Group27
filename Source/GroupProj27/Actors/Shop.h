@@ -13,4 +13,7 @@ class GROUPPROJ27_API AShop : public AActor
 
 public:
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	int AverageOrderQuality = 0;
+
 };
