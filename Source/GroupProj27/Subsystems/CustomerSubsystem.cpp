@@ -17,8 +17,16 @@ void UCustomerSubsystem::OrderCollected(int ID)
 	if(CustomerRef != nullptr)
 	{
 		CustomerRef->ToggleCustomer(false);
-		Orders.Remove(ID);
 		OnOrderCollected.Broadcast(ID, Orders.Num());
+	}
+}
+
+void UCustomerSubsystem::RemoveOrderFromTheList(int ID)
+{
+	const auto& CustomerRef = Orders[ID];
+	if(CustomerRef != nullptr)
+	{
+		Orders.Remove(ID);
 	}
 }
 

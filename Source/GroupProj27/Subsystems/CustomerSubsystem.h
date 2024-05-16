@@ -8,15 +8,15 @@
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnOrderCollectedSignature, int, ID, int, RemainingOrders);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnOrderInitialisedSignature);
-
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnChefReviewGenerateSignature, int, AverageReview);
 UCLASS()
 class GROUPPROJ27_API UCustomerSubsystem : public UGameInstanceSubsystem
 {
 	GENERATED_BODY()
 
 private:
-
 	int IDCount = -1;
+	
 	UPROPERTY()
 	class ACustomerManager* CustomerManager;
 	UPROPERTY()
@@ -25,6 +25,8 @@ private:
 	UPROPERTY()
 	TMap<int, class ACustomerMarker*> Orders;
 public:
+	UPROPERTY(BlueprintAssignable, BlueprintCallable)
+	FOnChefReviewGenerateSignature OnChefReviewGenerated;
 	UPROPERTY(BlueprintAssignable, BlueprintCallable)
 	FOnOrderInitialisedSignature OnOrderInitialised;
 	UPROPERTY(BlueprintAssignable)
@@ -76,11 +78,16 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void UpdateOrders(const TMap<int, class ACustomerMarker*>& OrderList) { Orders = OrderList; }
 	UFUNCTION(BlueprintCallable, BlueprintPure)
-	ACustomerMarker* GetOrderStatus(int CustomerID) {return (Orders.Contains(CustomerID))? Orders[CustomerID]: nullptr;}
+	ACustomerMarker* GetOrderStatus(int CustomerID)
+	{
+		return (Orders.Contains(CustomerID))? Orders[CustomerID]: nullptr;
+	}
 	UFUNCTION(BlueprintCallable, BlueprintPure)
 	bool CanTakeOrders() { return Orders.IsEmpty(); }
 	UFUNCTION(BlueprintCallable, BlueprintPure)
 	bool HasOrders() { return Orders.Num() > 0; }
+	UFUNCTION(BlueprintCallable)
+	void RemoveOrderFromTheList(int ID);
 		
 	UFUNCTION(BlueprintCallable)
 	void UpdateCustomersForCollection();
