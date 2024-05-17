@@ -25,8 +25,8 @@ private:
 	FTimerHandle DegradeTimeHandler;
 
 public:
-	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
-	int mIncreaseBy = 50;
+	UPROPERTY(EditDefaultsOnly)
+	TMap<TEnumAsByte<EPizzaQuality>, FMinMaxStruct> QualityRange;
 	UPROPERTY(BlueprintReadWrite)
 	FString ID;
 	UPROPERTY(BlueprintReadOnly)
