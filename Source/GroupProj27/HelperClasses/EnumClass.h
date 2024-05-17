@@ -28,6 +28,13 @@ enum ECountdownStatus
 };
 
 
+UENUM(BlueprintType)
+enum EPizzaQuality
+{
+	Best, Good, Average, Poor
+};
+
+
 UCLASS()
 class GROUPPROJ27_API UEnumClass : public UBlueprintFunctionLibrary
 {
