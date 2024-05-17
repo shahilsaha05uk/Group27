@@ -18,18 +18,17 @@ class GROUPPROJ27_API ACustomerMarker : public AActor
 
 private:
 	UPROPERTY()
-	int ID;
-	UPROPERTY()
 	int DecreaseRate;
 	UPROPERTY()
 	FPizzaStruct PizzaDetails;
 	UPROPERTY()
-	class UPizzaComponent* mPizzaComp;
-
-	UPROPERTY()
 	FTimerHandle DegradeTimeHandler;
 
 public:
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
+	int mIncreaseBy = 50;
+	UPROPERTY(BlueprintReadWrite)
+	FString ID;
 	UPROPERTY(BlueprintReadOnly)
 	class UCustomerSubsystem* CustomerSubsystem;
 	UPROPERTY(BlueprintAssignable, BlueprintCallable)
@@ -38,17 +37,27 @@ public:
 	UPROPERTY(BlueprintReadWrite)
 	bool bChosenForOrderList;
 
+	UPROPERTY(BlueprintReadWrite)
+	bool bIsActivated;
+	UPROPERTY(BlueprintReadWrite, EditDefaultsOnly)
+	class USphereComponent* mCollider;
+
+	ACustomerMarker();
 	virtual void BeginPlay() override;
 	virtual void BeginDestroy() override;
+	
+	UFUNCTION(BlueprintCallable)
+	void OnColliderOverlapBegin(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
+
 	UFUNCTION(BlueprintCallable, BlueprintPure)
 	const FPizzaStruct GetDetails() {return PizzaDetails;}
 	UFUNCTION(BlueprintCallable, BlueprintPure)
-	int GetID(){return ID;}
+	FString GetID(){return ID;}
 
 	UFUNCTION(BlueprintCallable)
 	void OnInitialisedForOrder();
 	UFUNCTION(BlueprintCallable)
-	void Init(class UPizzaComponent* pComp, FPizzaStruct pDetails);
+	void Init(FPizzaStruct pDetails);
 	UFUNCTION(BlueprintCallable)
 	void UpdatePizza();
 
