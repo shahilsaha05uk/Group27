@@ -4,9 +4,11 @@
 #include "CustomerMarker.h"
 
 #include "Components/SphereComponent.h"
+#include "GroupProj27/HelperClasses/EnumClass.h"
 #include "GroupProj27/Interfaces/ParkourPlayerInterface.h"
 #include "GroupProj27/Subsystems/CustomerSubsystem.h"
 #include "GroupProj27/Subsystems/ResourceSubsystem.h"
+#include "Kismet/KismetMathLibrary.h"
 #include "Kismet/KismetSystemLibrary.h"
 
 ACustomerMarker::ACustomerMarker()
@@ -51,12 +53,18 @@ void ACustomerMarker::ToggleCustomer_Implementation(bool Value)
 void ACustomerMarker::CollectPizza_Implementation()
 {
 	ToggleCustomer(false);
-
+	
 	CustomerSubsystem->OrderCollected(ID);
-
+	
 	if(const auto resourceSubs = GetGameInstance()->GetSubsystem<UResourceSubsystem>())
 	{
-		resourceSubs->AddBalance(mIncreaseBy);
+		if (QualityRange.Contains(PizzaDetails.QualityType))
+		{
+			// Directly get the range without creating a temporary object
+			FMinMaxStruct range = QualityRange[PizzaDetails.QualityType];
+			const int randResource = UKismetMathLibrary::RandomIntegerInRange(range.min, range.max);
+			resourceSubs->AddBalance(randResource);
+		}
 	}
 }
 
@@ -80,17 +88,33 @@ void ACustomerMarker::Init(FPizzaStruct pDetails)
 void ACustomerMarker::UpdatePizza()
 {
 	FString &review = PizzaDetails.Review;
+	TEnumAsByte<EPizzaQuality> &qualityType = PizzaDetails.QualityType;
 	const int &CurrentQuality = PizzaDetails.Quality;
 
 	// Update the Current Quality
 	DeductQuality(DecreaseRate);
 
 	// Update the Current Review
-	if(CurrentQuality >= 70) review = "Perfect!!";
-	else if(CurrentQuality >= 40 && CurrentQuality <70) review = "Good!!";
-	else if(CurrentQuality >= 10 && CurrentQuality <40) review = "Average!!";
-	else review = "POOP!!!";
-	
+	if(CurrentQuality >= 70)
+	{
+		qualityType = Best;
+		review = "Perfect!!";
+	}
+	else if(CurrentQuality >= 40 && CurrentQuality <70)
+	{
+		qualityType = Good;
+		review = "Good!!";
+	}
+	else if(CurrentQuality >= 10 && CurrentQuality <40)
+	{
+		qualityType = Average;
+		review = "Average!!";
+	}
+	else
+	{
+		qualityType = Poor;
+		review = "POOP!!!";
+	}
 	OnPizzaUpdated.Broadcast(PizzaDetails);
 }
 

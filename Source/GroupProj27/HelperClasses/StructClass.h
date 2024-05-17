@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "EnumClass.h"
 #include "Kismet/BlueprintFunctionLibrary.h"
 #include "StructClass.generated.h"
 
@@ -24,6 +25,18 @@ public:
 	class USkeletalMesh* CharacterMesh;	
 };
 
+USTRUCT(BlueprintType)
+struct FMinMaxStruct
+{
+	GENERATED_BODY()
+
+public:
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+	int min;
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+	int max;
+
+};
 
 USTRUCT(BlueprintType)
 struct FPizzaStruct
@@ -36,13 +49,15 @@ public:
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
 	int Quality;
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+	TEnumAsByte<EPizzaQuality> QualityType;
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
 	int DecreaseRate;
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
 	FString Review;
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
 	class UTexture2D* Icon;
 	
-	FPizzaStruct(int id, int quality, int dRate, FString review): Icon(nullptr)
+	FPizzaStruct(int id, int quality, int dRate, FString review): QualityType(Best), Icon(nullptr)
 	{
 		ID = id;
 		Quality = quality;
@@ -50,7 +65,7 @@ public:
 		Review = review;
 	}
 
-	FPizzaStruct(): ID(0), Quality(0), DecreaseRate(0), Icon(nullptr)
+	FPizzaStruct(): ID(0), Quality(0), QualityType(Best), DecreaseRate(0), Icon(nullptr)
 	{
 	}
 };
