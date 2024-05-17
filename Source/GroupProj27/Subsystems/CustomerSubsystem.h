@@ -3,10 +3,11 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "GroupProj27/Actors/CustomerMarker.h"
 #include "Subsystems/GameInstanceSubsystem.h"
 #include "CustomerSubsystem.generated.h"
 
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnOrderCollectedSignature, int, ID, int, RemainingOrders);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnOrderCollectedSignature, FString, ID, int, RemainingOrders);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnOrderInitialisedSignature);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnChefReviewGenerateSignature, int, AverageReview);
 UCLASS()
@@ -20,10 +21,10 @@ private:
 	UPROPERTY()
 	class ACustomerManager* CustomerManager;
 	UPROPERTY()
-	TMap<int, class ACustomerMarker*> Customers;
+	TMap<FString, class ACustomerMarker*> Customers;
 
 	UPROPERTY()
-	TMap<int, class ACustomerMarker*> Orders;
+	TMap<FString, class ACustomerMarker*> Orders;
 public:
 	UPROPERTY(BlueprintAssignable, BlueprintCallable)
 	FOnChefReviewGenerateSignature OnChefReviewGenerated;
@@ -32,36 +33,42 @@ public:
 	UPROPERTY(BlueprintAssignable)
 	FOnOrderCollectedSignature OnOrderCollected;
 	UFUNCTION(BlueprintCallable)
-	void OrderCollected(int ID);
+	void OrderCollected(const FString& ID);
 	
 	// Customer Management
 	UFUNCTION(BlueprintCallable, BlueprintPure)
-	ACustomerMarker* GetCustomer(int ID) {return (Customers.Find(ID))? Customers[ID] : nullptr;}
+	ACustomerMarker* GetCustomer(const FString ID) {return (Customers.Find(ID))? Customers[ID] : nullptr;}
 	UFUNCTION(BlueprintCallable, BlueprintPure)
-	TMap<int, class ACustomerMarker*> &GetAllCustomers() { return Customers; }
+	TMap<FString, class ACustomerMarker*> &GetAllCustomers() { return Customers; }
 
 	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
-	void ToggleCustomer(int CustomerID, bool shouldActivate);
+	void ToggleCustomer(const FString& CustomerID, bool shouldActivate);
 
 	UFUNCTION(BlueprintCallable)
-	int RegisterCustomer(class ACustomerMarker* Customer)
+	FString RegisterCustomer(class ACustomerMarker* Customer)
 	{
-		IDCount++;
-		if(!Customers.Contains(IDCount))
+		FGuid Guid = FGuid::NewGuid();
+		FString ID = "Cust" + Guid.ToString();
+		if(!Customers.Contains(ID))
 		{
-			Customers.Add(IDCount, Customer);
+			Customers.Add(ID, Customer);
 		}
-		return IDCount;
+		return ID;
 	}
 	
 	// Order Mamangement
 	UFUNCTION(BlueprintCallable, BlueprintPure)
-	const TMap<int, class ACustomerMarker*> &GetOrderList() { return Orders; }
+	const TMap<FString, class ACustomerMarker*> &GetOrderList() { return Orders; }
 	UFUNCTION(BlueprintCallable)
-	void AddOrder(int ID, ACustomerMarker* Pizza)
+	void AddOrder(FString ID, ACustomerMarker* Pizza)
 	{
 		if(Orders.Contains(ID)) return;
 		Orders.Add(ID, Pizza);
+	}
+	UFUNCTION(BlueprintCallable)
+	void ClearAllOrders()
+	{
+		if(!Orders.IsEmpty()) Orders.Empty(0);
 	}
 	UFUNCTION(BlueprintCallable)
 	void FlushEverything()
@@ -76,9 +83,9 @@ public:
 		IDCount = -1;
 	}
 	UFUNCTION(BlueprintCallable)
-	void UpdateOrders(const TMap<int, class ACustomerMarker*>& OrderList) { Orders = OrderList; }
+	void UpdateOrders(const TMap<FString, class ACustomerMarker*>& OrderList) { Orders = OrderList; }
 	UFUNCTION(BlueprintCallable, BlueprintPure)
-	ACustomerMarker* GetOrderStatus(int CustomerID)
+	ACustomerMarker* GetOrderStatus(const FString& CustomerID)
 	{
 		return (Orders.Contains(CustomerID))? Orders[CustomerID]: nullptr;
 	}
@@ -87,7 +94,7 @@ public:
 	UFUNCTION(BlueprintCallable, BlueprintPure)
 	bool HasOrders() { return Orders.Num() > 0; }
 	UFUNCTION(BlueprintCallable)
-	void RemoveOrderFromTheList(int ID);
+	void RemoveOrderFromTheList(const FString& ID);
 		
 	UFUNCTION(BlueprintCallable)
 	void UpdateCustomersForCollection();

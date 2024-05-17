@@ -3,18 +3,43 @@
 
 #include "CustomerMarker.h"
 
+#include "Components/SphereComponent.h"
+#include "GroupProj27/Interfaces/ParkourPlayerInterface.h"
 #include "GroupProj27/Subsystems/CustomerSubsystem.h"
+#include "GroupProj27/Subsystems/ResourceSubsystem.h"
+#include "Kismet/KismetSystemLibrary.h"
+
+ACustomerMarker::ACustomerMarker()
+{
+	mCollider = CreateDefaultSubobject<USphereComponent>("Collider");
+	mCollider->SetupAttachment(RootComponent);
+}
 
 void ACustomerMarker::BeginPlay()
 {
-	CustomerSubsystem = GetWorld()->GetGameInstance()->GetSubsystem<UCustomerSubsystem>();
 	Super::BeginPlay();
+	CustomerSubsystem = GetWorld()->GetGameInstance()->GetSubsystem<UCustomerSubsystem>();
+	mCollider->OnComponentBeginOverlap.AddDynamic(this, &ThisClass::OnColliderOverlapBegin);
+
+	if(CustomerSubsystem)
+	{
+		ID = CustomerSubsystem->RegisterCustomer(this);
+	}
 }
 
 void ACustomerMarker::BeginDestroy()
 {
 	OnPizzaUpdated.RemoveAll(this);
 	Super::BeginDestroy();
+}
+
+void ACustomerMarker::OnColliderOverlapBegin(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
+	UPrimitiveComponent* OtherComp, int OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
+{
+	if(UKismetSystemLibrary::DoesImplementInterface(OtherActor, UParkourPlayerInterface::StaticClass()) && bIsActivated)
+	{
+		CollectPizza();
+	}
 }
 
 void ACustomerMarker::ToggleCustomer_Implementation(bool Value)
@@ -25,6 +50,14 @@ void ACustomerMarker::ToggleCustomer_Implementation(bool Value)
 
 void ACustomerMarker::CollectPizza_Implementation()
 {
+	ToggleCustomer(false);
+
+	CustomerSubsystem->OrderCollected(ID);
+
+	if(const auto resourceSubs = GetGameInstance()->GetSubsystem<UResourceSubsystem>())
+	{
+		resourceSubs->AddBalance(mIncreaseBy);
+	}
 }
 
 void ACustomerMarker::OnInitialisedForOrder()
@@ -36,11 +69,10 @@ void ACustomerMarker::OnInitialisedForOrder()
 	}
 }
 
-void ACustomerMarker::Init(UPizzaComponent* pComp, FPizzaStruct pDetails)
+void ACustomerMarker::Init(FPizzaStruct pDetails)
 {
 	PizzaDetails = pDetails;
 	DecreaseRate = pDetails.DecreaseRate;
-	mPizzaComp = pComp;
 	bChosenForOrderList = true;
 	CustomerSubsystem->OnOrderInitialised.AddDynamic(this, &ThisClass::OnInitialisedForOrder);
 }

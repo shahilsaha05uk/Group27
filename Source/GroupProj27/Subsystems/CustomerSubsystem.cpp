@@ -5,23 +5,26 @@
 
 #include "GroupProj27/Actors/CustomerMarker.h"
 
-void UCustomerSubsystem::ToggleCustomer_Implementation(int CustomerID, bool shouldActivate)
+void UCustomerSubsystem::ToggleCustomer_Implementation(const FString& CustomerID, bool shouldActivate)
 {
 	if(const auto Customer = GetCustomer(CustomerID); Customer != nullptr) {
 		Customer->ToggleCustomer(shouldActivate);
 	}
 }
-void UCustomerSubsystem::OrderCollected(int ID)
+void UCustomerSubsystem::OrderCollected(const FString& ID)
 {
 	const auto& CustomerRef = Orders[ID];
 	if(CustomerRef != nullptr)
 	{
+		const auto id = CustomerRef->GetID();
 		CustomerRef->ToggleCustomer(false);
-		OnOrderCollected.Broadcast(ID, Orders.Num());
+		OnOrderCollected.Broadcast(ID, Orders.Num() - 1);
+
+		RemoveOrderFromTheList(ID);
 	}
 }
 
-void UCustomerSubsystem::RemoveOrderFromTheList(int ID)
+void UCustomerSubsystem::RemoveOrderFromTheList(const FString& ID)
 {
 	const auto& CustomerRef = Orders[ID];
 	if(CustomerRef != nullptr)
@@ -34,7 +37,7 @@ void UCustomerSubsystem::UpdateCustomersForCollection()
 {
 	for (auto o : Orders)
 	{
-		int id = o.Value->GetID();
+		const auto id = o.Value->GetID();
 
 		if(Customers.Contains(id))
 		{

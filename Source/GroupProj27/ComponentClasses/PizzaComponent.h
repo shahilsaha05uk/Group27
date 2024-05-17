@@ -14,11 +14,17 @@ private:
 	UPROPERTY()
 	FTimerHandle QualityTimerHandle;
 public:
+	UPROPERTY(EditDefaultsOnly)
+	int mMinOrders = 1;
+	UPROPERTY(EditDefaultsOnly)
+	int mMaxOrders = 5;
+	UPROPERTY(BlueprintReadOnly)
+	int TotalOrders = 0;
 	UPROPERTY(BlueprintReadOnly)
 	class UCustomerSubsystem* mCustomerSubsystem;
 
 	UPROPERTY(EditDefaultsOnly)
-	float mQualityDecreaseRate;
+	int mQualityDecreaseRate;
 
 	virtual void BeginPlay() override;
 	
@@ -26,7 +32,7 @@ public:
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable)
 	bool InitiateOrders(bool AutoInitialise);
 	UFUNCTION(BlueprintCallable,BlueprintNativeEvent)
-	bool CreateOrder(int CustomerID, FPizzaStruct PizzaDetails);
+	bool CreateOrder(const FString& CustomerID, FPizzaStruct PizzaDetails);
 	UFUNCTION(BlueprintCallable,BlueprintNativeEvent)
 	void ClearOrders();
 

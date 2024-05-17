@@ -24,6 +24,20 @@ public:
 	UPROPERTY(BlueprintReadWrite, EditDefaultsOnly, Category = "Components")
 	class UCameraComponent* mCameraComponent;
 	
+	UPROPERTY(BlueprintReadWrite, EditDefaultsOnly, Category = "Private")
+	class USkeletalMesh* mDefaultCharacterMesh;
+	UPROPERTY(BlueprintReadWrite, EditDefaultsOnly, Category = "Private")
+	class UDA_CharacterDetails* mCharacterDetailsAsset;
+	
+	UPROPERTY(BlueprintReadWrite, EditDefaultsOnly, Category = "Private | Animation")
+	float mRollAnimSequenceLength;
+
+	UPROPERTY(BlueprintReadWrite, EditDefaultsOnly, Category = "Private | Movement")
+	float mAirControl;
+	UPROPERTY(BlueprintReadWrite, EditDefaultsOnly, Category = "Private | Movement")
+	float mDefaultCapsuleHeight;
+	UPROPERTY(BlueprintReadWrite, EditDefaultsOnly, Category = "Private | Movement")
+	float mTargetCapsuleHeightWhenRolling;
 	UPROPERTY(BlueprintReadWrite, EditDefaultsOnly, Category = "Private | Movement")
 	float mRunSpeed;
 
@@ -48,9 +62,16 @@ public:
 	// Player UI Input Interface methods
 	virtual void PauseGame_Implementation() override;
 	virtual void TogglePhone_Implementation() override;
-	
+
 	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
-	void SaveMovementInputs(FVector RightVec, FVector ForwardVec, float X, float Y);
+	void Init();
+	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
+	void OnChefReviewRecieved(int avgReview);
+
+	
+	UFUNCTION(BlueprintCallable)
+	void SetCharacterMesh();
+	
 	UFUNCTION(BlueprintCallable)
 	void SetCapsuleHeight(float Value, bool UpdateOverlaps);
 	UFUNCTION(BlueprintCallable, BlueprintNativeEvent)
