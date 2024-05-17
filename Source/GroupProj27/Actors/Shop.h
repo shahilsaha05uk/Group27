@@ -26,9 +26,9 @@ public:
 
 	UPROPERTY(BlueprintReadWrite, EditDefaultsOnly)
 	class UStaticMeshComponent* mShopMesh;
-	UPROPERTY(BlueprintReadWrite, EditDefaultsOnly)
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
 	class USphereComponent* mNormalCollider;
-	UPROPERTY(BlueprintReadWrite, EditDefaultsOnly)
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
 	class USphereComponent* mCountdownCollider;
 	UPROPERTY(BlueprintReadWrite, EditDefaultsOnly)
 	class UPizzaComponent* mPizzaComp;
